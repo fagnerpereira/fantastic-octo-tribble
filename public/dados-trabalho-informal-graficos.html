@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma do Trabalhador - Infográfico com IA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilos para containers de gráficos para garantir responsividade */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <!-- Cabeçalho -->
+        <header class="text-center my-8 md:my-12">
+            <div class="inline-block p-2 bg-blue-100 text-[#00449E] rounded-full text-sm font-bold mb-4 px-4">PROJETO WORKER-FIRST</div>
+            <h1 class="text-4xl md:text-5xl font-bold text-[#00449E]">Revolução no Trabalho Manual</h1>
+            <p class="text-xl md:text-2xl text-[#005BC6] mt-4">Conectando pedreiros e profissionais a oportunidades justas, impulsionado por IA e dados reais.</p>
+        </header>
+
+        <main>
+            <!-- Seção: O Problema com Dados Reais -->
+            <section class="bg-white rounded-lg shadow-md p-6 md:p-8 my-8 border-l-4 border-[#0072F0]">
+                <h2 class="text-3xl font-bold text-[#00449E] text-center mb-2">A Realidade do Setor (Dados Oficiais)</h2>
+                <p class="text-center text-gray-500 mb-8 italic">Fontes: IBGE (PNAD Contínua 2023/24), CBIC e SindusCon-SP</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="flex flex-col gap-6">
+                        <div class="p-6 bg-red-50 rounded-lg border border-red-100">
+                            <div class="flex justify-between items-end">
+                                <span class="text-6xl font-bold text-red-600">67%</span>
+                                <span class="text-sm text-red-800 font-semibold mb-2">FONTE: CBIC/PNAD 2023</span>
+                            </div>
+                            <p class="text-lg text-gray-800 mt-2 font-semibold">Taxa de Informalidade na Construção</p>
+                            <p class="text-gray-600 text-sm">Muito superior à média nacional de 40%. Isso significa instabilidade e falta de aposentadoria.</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-gray-100 rounded-lg text-center">
+                                <span class="block text-2xl font-bold text-[#00449E]">R$ 2.116</span>
+                                <span class="text-xs text-gray-600">Renda Média Mensal (2023)</span>
+                            </div>
+                            <div class="p-4 bg-gray-100 rounded-lg text-center">
+                                <span class="block text-2xl font-bold text-[#00449E]">Baixa</span>
+                                <span class="text-xs text-gray-600">Escolaridade Predominante (Fund. Incompleto)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 text-center mb-4">Informalidade vs. Formalidade (Brasil)</h3>
+                        <div class="chart-container">
+                            <canvas id="informalidadeChart"></canvas>
+                        </div>
+                        <p class="text-center text-xs text-gray-500 mt-2">A alta informalidade força a dependência do "boca a boca" e dificulta o acesso à previdência.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: O Diferencial com Gemini AI -->
+            <section class="my-12">
+                <div class="bg-gradient-to-r from-[#00449E] to-[#0072F0] rounded-xl p-8 text-white shadow-lg">
+                    <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+                        <div>
+                            <h2 class="text-3xl font-bold">IA Gemini: A "Secretária Digital" do Trabalhador</h2>
+                            <p class="text-blue-100 mt-2 text-lg">Usando Inteligência Artificial para quebrar barreiras de instrução e burocracia.</p>
+                        </div>
+                        <span class="text-5xl mt-4 md:mt-0">✨🤖</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Feature 1 -->
+                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 hover:bg-white/20 transition">
+                            <div class="text-3xl mb-3">🎙️ &rarr; 📄</div>
+                            <h3 class="text-xl font-bold mb-2">Orçamentos por Voz</h3>
+                            <p class="text-sm text-blue-50">O trabalhador dita o que precisa ser feito e a IA gera um orçamento PDF profissional e detalhado para o cliente, evitando erros de português ou formatação.</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 hover:bg-white/20 transition">
+                            <div class="text-3xl mb-3">⚖️</div>
+                            <h3 class="text-xl font-bold mb-2">Assistente Jurídico Simplificado</h3>
+                            <p class="text-sm text-blue-50">Um chat alimentado por leis trabalhistas onde o trabalhador pergunta por áudio: "Tenho direito a aposentadoria se pagar X?" e recebe respostas simples.</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="bg-white/10 backdrop-blur-md p-6 rounded-lg border border-white/20 hover:bg-white/20 transition">
+                            <div class="text-3xl mb-3">🎓</div>
+                            <h3 class="text-xl font-bold mb-2">Tutor de Formalização (MEI)</h3>
+                            <p class="text-sm text-blue-50">Guia passo-a-passo interativo que ensina como abrir MEI e emitir notas, analisando documentos por foto para facilitar o cadastro.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: O Modelo Worker-First -->
+            <section class="my-8">
+                <h2 class="text-3xl font-bold text-[#00449E] text-center mb-8">Como Invertemos a Lógica do Mercado</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Gráfico de Comparação -->
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h3 class="text-xl font-bold text-center mb-4">Fim do "Leilão de Preços"</h3>
+                        <div class="chart-container">
+                            <canvas id="modeloChart"></canvas>
+                        </div>
+                        <p class="text-sm text-gray-600 mt-4 text-center">Em apps comuns, muitos brigam por uma vaga. Aqui, limitamos a concorrência para garantir dignidade.</p>
+                    </div>
+
+                    <!-- Diagrama de Fluxo -->
+                    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-center">
+                        <h3 class="text-xl font-bold text-center mb-6">Jornada Protegida</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center p-3 bg-blue-50 rounded border-l-4 border-[#00449E]">
+                                <span class="text-2xl mr-3">1️⃣</span>
+                                <div>
+                                    <p class="font-bold text-[#00449E]">Cliente Posta Vaga</p>
+                                    <p class="text-xs text-gray-600">Detalhes claros, sem leilão oculto.</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-center"><span class="text-gray-400">⬇️</span></div>
+                            <div class="flex items-center p-3 bg-blue-50 rounded border-l-4 border-[#00449E]">
+                                <span class="text-2xl mr-3">2️⃣</span>
+                                <div>
+                                    <p class="font-bold text-[#00449E]">Trabalhador "Pega" o Job</p>
+                                    <p class="text-xs text-gray-600">Como uma 'task'. Se pegou, é dele. Sem disputa.</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-center"><span class="text-gray-400">⬇️</span></div>
+                            <div class="flex items-center p-3 bg-green-50 rounded border-l-4 border-green-500">
+                                <span class="text-2xl mr-3">3️⃣</span>
+                                <div>
+                                    <p class="font-bold text-green-700">Auditoria & Pagamento</p>
+                                    <p class="text-xs text-gray-600">Chat gravado e pagamentos via plataforma para prova legal.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção: Crescimento e Roadmap -->
+            <section class="bg-white rounded-lg shadow-md p-6 md:p-8 my-8">
+                <h2 class="text-3xl font-bold text-[#00449E] text-center mb-6">Impacto Esperado e Expansão</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <span class="text-4xl font-bold text-[#0072F0]"> MVP </span>
+                        <p class="mt-2 font-medium">Foco em Pedreiros</p>
+                        <p class="text-sm text-gray-500">Validação do chat auditável e orçamentos via IA.</p>
+                    </div>
+                    <div class="p-4 border border-gray-200 rounded-lg bg-blue-50">
+                        <span class="text-4xl font-bold text-[#0072F0]"> V2 </span>
+                        <p class="mt-2 font-medium">Expansão de Categorias</p>
+                        <p class="text-sm text-gray-500">Pintores, Eletricistas e módulo educativo MEI.</p>
+                    </div>
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <span class="text-4xl font-bold text-[#0072F0]"> V3 </span>
+                        <p class="mt-2 font-medium">Cooperativa Digital</p>
+                        <p class="text-sm text-gray-500">Benefícios coletivos, seguros e parcerias INSS.</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-gray-200">
+                     <h3 class="text-xl font-bold text-center mb-4 text-gray-700">Projeção: Nível de Suporte ao Profissional</h3>
+                     <div class="chart-container">
+                        <canvas id="suporteChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer com Fontes -->
+        <footer class="mt-12 py-8 border-t border-gray-300 bg-gray-100 text-center rounded-lg">
+            <h4 class="font-bold text-gray-700 mb-4">Fontes de Dados Utilizadas</h4>
+            <ul class="text-sm text-gray-600 space-y-1">
+                <li><strong>IBGE:</strong> PNAD Contínua (2023/2024) - Dados de ocupação e informalidade.</li>
+                <li><strong>CBIC & SindusCon-SP:</strong> Estudos sobre o perfil do trabalhador da construção civil (2024).</li>
+                <li><strong>Sebrae:</strong> Dados sobre MEI e microempreendedores individuais.</li>
+            </ul>
+            <p class="text-xs text-gray-400 mt-6">Gerado para fins de planejamento de projeto social.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Função para quebrar labels longos
+            const wrapLabel = (label) => {
+                const maxChars = 20; // Aumentado um pouco para nomes de fontes
+                if (typeof label !== 'string' || label.length <= maxChars) {
+                    return label;
+                }
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                for (const word of words) {
+                    if ((currentLine + ' ' + word).trim().length > maxChars) {
+                        lines.push(currentLine.trim());
+                        currentLine = word;
+                    } else {
+                        currentLine = (currentLine + ' ' + word).trim();
+                    }
+                }
+                if (currentLine) {
+                    lines.push(currentLine.trim());
+                }
+                return lines;
+            };
+
+            // Callback para Tooltips multilinhas
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                } else {
+                    return label;
+                }
+            };
+            
+            // Paleta de cores vibrante (Baseada em Azul Profissional)
+            const colors = {
+                primary: '#00449E',
+                secondary: '#0072F0',
+                accent: '#58AFFF',
+                light: '#B2DBFF',
+                alert: '#EF4444',
+                success: '#10B981'
+            };
+
+            const baseOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: { title: tooltipTitleCallback }
+                    }
+                }
+            };
+
+            // Gráfico 1: Informalidade (Dados Reais)
+            const ctxInformal = document.getElementById('informalidadeChart')?.getContext('2d');
+            if (ctxInformal) {
+                new Chart(ctxInformal, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Informal (Sem direitos)', 'Formal (Com carteira/CNPJ)'],
+                        datasets: [{
+                            data: [67, 33], // Fonte: CBIC/PNAD 2023
+                            backgroundColor: [colors.alert, colors.success],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        ...baseOptions,
+                        plugins: {
+                            ...baseOptions.plugins,
+                            title: {
+                                display: true,
+                                text: 'Construção Civil: 67% na Informalidade'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico 2: Modelo de Competição (Conceitual)
+            const ctxModelo = document.getElementById('modeloChart')?.getContext('2d');
+            if (ctxModelo) {
+                const labelsModelo = ['Apps Tradicionais (Leilão)', 'Nossa Plataforma (Fila Única)'].map(wrapLabel);
+                new Chart(ctxModelo, {
+                    type: 'bar',
+                    data: {
+                        labels: labelsModelo,
+                        datasets: [{
+                            label: 'Candidatos por Vaga (Média)',
+                            data: [15, 1], // Estimativa baseada na lógica de "quem pega, leva"
+                            backgroundColor: [colors.light, colors.secondary],
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        ...baseOptions,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: { display: true, text: 'Concorrência Direta' }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico 3: Radar de Suporte
+            const ctxSuporte = document.getElementById('suporteChart')?.getContext('2d');
+            if (ctxSuporte) {
+                const labelsRadar = ['Captação de Clientes', 'Segurança Jurídica', 'Educação Financeira', 'Previdência', 'Saúde Mental'].map(wrapLabel);
+                new Chart(ctxSuporte, {
+                    type: 'radar',
+                    data: {
+                        labels: labelsRadar,
+                        datasets: [{
+                            label: 'Situação Atual (Autônomo)',
+                            data: [2, 1, 1, 1, 2],
+                            borderColor: colors.alert,
+                            backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                            pointBackgroundColor: colors.alert
+                        },
+                        {
+                            label: 'Com a Plataforma + IA',
+                            data: [5, 5, 4, 4, 4],
+                            borderColor: colors.secondary,
+                            backgroundColor: 'rgba(0, 114, 240, 0.2)',
+                            pointBackgroundColor: colors.secondary
+                        }]
+                    },
+                    options: {
+                        ...baseOptions,
+                        scales: {
+                            r: {
+                                min: 0,
+                                max: 5,
+                                ticks: { stepSize: 1, backdropColor: 'transparent' }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

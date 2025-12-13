@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROCHA Web - Plataforma de Trabalho Justo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+    </style>
+</head>
+<body class="text-gray-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- NAV BAR (Fixa no topo) -->
+    <nav class="bg-gray-900 text-white h-16 flex items-center justify-between px-6 shadow-md z-50 shrink-0">
+        <!-- Logo -->
+        <div class="flex items-center gap-2 cursor-pointer" onclick="showPage('landing')">
+            <i class="ph-fill ph-hexagon text-3xl text-orange-500"></i>
+            <span class="text-2xl font-black tracking-wider uppercase">ROCHA</span>
+        </div>
+
+        <!-- Menu Central (Visível apenas quando logado) -->
+        <div id="nav-links" class="hidden gap-8 text-sm font-bold uppercase tracking-wide">
+            <button onclick="showPage('worker-feed')" class="hover:text-orange-400 transition text-orange-500 border-b-2 border-orange-500 py-5">Mural de Vagas</button>
+            <button onclick="showPage('client-dash')" class="hover:text-orange-400 transition py-5">Meus Pedidos</button>
+            <button onclick="showPage('chat-center')" class="hover:text-orange-400 transition py-5 flex items-center gap-2">
+                Mensagens <span class="bg-red-500 text-white text-[10px] px-1.5 rounded-full">1</span>
+            </button>
+        </div>
+
+        <!-- Ações Direita -->
+        <div class="flex items-center gap-4">
+            <div id="auth-buttons" class="flex gap-3">
+                <button onclick="showPage('login')" class="text-sm font-bold hover:text-orange-400">Entrar</button>
+                <button onclick="showPage('register')" class="bg-orange-600 hover:bg-orange-500 text-white px-4 py-2 rounded-lg text-sm font-bold transition">Criar Conta</button>
+            </div>
+
+            <!-- User Menu (Escondido no início) -->
+            <div id="user-menu" class="hidden items-center gap-3 border-l border-gray-700 pl-4">
+                <div class="text-right hidden md:block">
+                    <p class="text-sm font-bold leading-none">Zé Silva</p>
+                    <p class="text-xs text-orange-400 font-medium mt-0.5" id="user-role-label">Profissional</p>
+                </div>
+                <div class="w-9 h-9 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center font-bold border-2 border-orange-500 cursor-pointer hover:opacity-80">JS</div>
+                <button onclick="logout()" class="text-gray-400 hover:text-white"><i class="ph-bold ph-sign-out text-xl"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL (Área Rolável) -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 relative" id="main-container">
+
+        <!-- ================= PAGE: LANDING ================= -->
+        <div id="page-landing" class="min-h-full flex flex-col fade-in">
+            <!-- Hero Section -->
+            <section class="bg-gray-900 text-white py-20 px-6 text-center relative overflow-hidden flex-1 flex flex-col justify-center">
+                <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#f97316 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+                <div class="max-w-4xl mx-auto relative z-10">
+                    <div class="inline-block bg-orange-500/10 border border-orange-500/30 rounded-full px-4 py-1 mb-6">
+                        <span class="text-orange-400 text-sm font-bold tracking-widest uppercase">Segurança de verdade</span>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-tight">
+                        TRABALHO FIRME.<br>PREÇO JUSTO.
+                    </h1>
+                    <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        A plataforma que conecta quem precisa de obra com quem sabe fazer.
+                        Sem leilão de preço. Sem taxa para ver vaga. O primeiro a aceitar, leva.
+                    </p>
+                    <div class="flex flex-col md:flex-row gap-4 justify-center">
+                        <button onclick="showPage('worker-feed'); loginUser('worker')" class="bg-orange-600 text-white px-8 py-4 rounded-xl text-lg font-black hover:bg-orange-500 transition shadow-lg shadow-orange-900/20 flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-wrench"></i> SOU PROFISSIONAL
+                        </button>
+                        <button onclick="showPage('client-dash'); loginUser('client')" class="bg-white text-gray-900 px-8 py-4 rounded-xl text-lg font-black hover:bg-gray-100 transition shadow-lg flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-user"></i> SOU CLIENTE
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Grid -->
+            <section class="py-20 px-6 bg-white border-t border-gray-200">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-blue-600">
+                            <i class="ph-fill ph-gavel text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black mb-3">Sem Leilão</h3>
+                        <p class="text-gray-500 leading-relaxed">Chega de disputar preço. O valor é fixo e justo. Gostou da vaga? Clicou, pegou.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-green-600">
+                            <i class="ph-fill ph-lock-key text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black mb-3">Pagamento Garantido</h3>
+                        <p class="text-gray-500 leading-relaxed">O dinheiro do cliente fica guardado no app e é liberado assim que o serviço termina.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-6 text-orange-600">
+                            <i class="ph-fill ph-chat-text text-3xl"></i>
+                        </div>
+                        <h3 class="text-xl font-black mb-3">Tudo Registrado</h3>
+                        <p class="text-gray-500 leading-relaxed">Chat seguro e auditável. Produza provas do seu trabalho com fotos de antes e depois.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE: WORKER FEED ================= -->
+        <div id="page-worker-feed" class="hidden min-h-full fade-in p-6 md:p-10">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl font-black text-gray-900">Mural de Vagas</h2>
+                        <p class="text-gray-500 mt-1">Encontre seu próximo serviço perto de você.</p>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="flex gap-2 bg-white p-1.5 rounded-lg shadow-sm border border-gray-200">
+                        <button class="px-4 py-2 bg-gray-900 text-white rounded-md font-bold text-sm shadow-sm">Todos</button>
+                        <button class="px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-md font-bold text-sm">🧱 Pedreiro</button>
+                        <button class="px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-md font-bold text-sm">🎨 Pintor</button>
+                        <button class="px-4 py-2 text-gray-600 hover:bg-gray-50 rounded-md font-bold text-sm">⚡ Eletricista</button>
+                    </div>
+                </div>
+
+                <!-- Job Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- Job Card 1 -->
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-orange-300 transition group cursor-pointer flex flex-col" onclick="openJobModal()">
+                        <div class="p-6 flex-1">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="bg-gray-900 text-white text-[10px] font-black uppercase px-2 py-1 rounded">Pedreiro</span>
+                                <div class="flex items-center gap-1 text-gray-400 text-xs font-bold">
+                                    <i class="ph-fill ph-map-pin"></i> 2km
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-black text-gray-900 mb-2 group-hover:text-orange-600 transition">Rebocar Parede Externa</h3>
+                            <p class="text-gray-500 text-sm line-clamp-3 mb-4">
+                                Preciso de um profissional para rebocar um muro de 3m de altura por 5m de largura. O material (areia, cimento) já está comprado e disponível no local.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between rounded-b-xl">
+                            <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase">Pagamento</p>
+                                <p class="text-2xl font-black text-green-600">R$ 450</p>
+                            </div>
+                            <button class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-hover:bg-orange-500 group-hover:text-white group-hover:border-orange-500 transition">
+                                <i class="ph-bold ph-arrow-right text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Job Card 2 -->
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-orange-300 transition group cursor-pointer flex flex-col opacity-75">
+                        <div class="p-6 flex-1">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="bg-blue-600 text-white text-[10px] font-black uppercase px-2 py-1 rounded">Pintor</span>
+                                <div class="flex items-center gap-1 text-gray-400 text-xs font-bold">
+                                    <i class="ph-fill ph-map-pin"></i> 5km
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-black text-gray-900 mb-2 group-hover:text-blue-600 transition">Pintura Apartamento</h3>
+                            <p class="text-gray-500 text-sm line-clamp-3 mb-4">
+                                Pintura de sala e dois quartos. Paredes brancas, teto branco. Apartamento vazio.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between rounded-b-xl">
+                            <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase">Pagamento</p>
+                                <p class="text-2xl font-black text-green-600">R$ 800</p>
+                            </div>
+                            <button class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition">
+                                <i class="ph-bold ph-arrow-right text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Job Card 3 -->
+                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-orange-300 transition group cursor-pointer flex flex-col">
+                        <div class="p-6 flex-1">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="bg-yellow-500 text-white text-[10px] font-black uppercase px-2 py-1 rounded">Eletricista</span>
+                                <div class="flex items-center gap-1 text-gray-400 text-xs font-bold">
+                                    <i class="ph-fill ph-map-pin"></i> 1.5km
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-black text-gray-900 mb-2 group-hover:text-yellow-600 transition">Instalar Chuveiro</h3>
+                            <p class="text-gray-500 text-sm line-clamp-3 mb-4">
+                                Troca de chuveiro elétrico e verificação da fiação do banheiro.
+                            </p>
+                        </div>
+                        <div class="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between rounded-b-xl">
+                            <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase">Pagamento</p>
+                                <p class="text-2xl font-black text-green-600">R$ 120</p>
+                            </div>
+                            <button class="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-400 group-hover:bg-yellow-500 group-hover:text-white group-hover:border-yellow-500 transition">
+                                <i class="ph-bold ph-arrow-right text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE: CLIENT DASHBOARD ================= -->
+        <div id="page-client-dash" class="hidden min-h-full fade-in p-6 md:p-10">
+            <div class="max-w-7xl mx-auto">
+
+                <div class="flex justify-between items-end mb-8">
+                    <div>
+                        <h2 class="text-3xl font-black text-gray-900">Meus Pedidos</h2>
+                        <p class="text-gray-500 mt-1">Gerencie suas obras e pagamentos.</p>
+                    </div>
+                    <button onclick="openPostJobModal()" class="bg-gray-900 hover:bg-black text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition shadow-lg">
+                        <i class="ph-bold ph-plus"></i> Novo Serviço
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-2xl"><i class="ph-fill ph-hourglass"></i></div>
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold uppercase">Em Andamento</p>
+                            <p class="text-2xl font-black text-gray-900">1</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
+                        <div class="w-12 h-12 bg-green-50 text-green-600 rounded-lg flex items-center justify-center text-2xl"><i class="ph-fill ph-check-circle"></i></div>
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold uppercase">Concluídos</p>
+                            <p class="text-2xl font-black text-gray-900">4</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4">
+                        <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-lg flex items-center justify-center text-2xl"><i class="ph-fill ph-wallet"></i></div>
+                        <div>
+                            <p class="text-gray-500 text-xs font-bold uppercase">Investido</p>
+                            <p class="text-2xl font-black text-gray-900">R$ 2.450</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Jobs Table -->
+                <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+                    <div class="px-6 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                        <h3 class="font-bold text-gray-900">Serviços Recentes</h3>
+                        <button class="text-sm text-orange-600 font-bold hover:underline">Ver Histórico</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-white text-gray-500 uppercase font-bold text-xs">
+                                <tr>
+                                    <th class="px-6 py-4">Serviço</th>
+                                    <th class="px-6 py-4">Profissional</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4">Valor</th>
+                                    <th class="px-6 py-4 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="px-6 py-4 font-bold text-gray-900">Reboco Muro Externo</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-6 h-6 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center text-xs font-bold">ZS</div>
+                                            <span class="text-gray-600">Zé Silva</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4"><span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full font-bold">Em Andamento</span></td>
+                                    <td class="px-6 py-4 font-medium">R$ 450,00</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button onclick="showPage('chat-center')" class="text-gray-400 hover:text-orange-500 font-bold"><i class="ph-bold ph-chat-centered-text text-lg"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 transition opacity-60">
+                                    <td class="px-6 py-4 font-bold text-gray-900">Pintura Quarto Bebê</td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-6 h-6 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs font-bold">MA</div>
+                                            <span class="text-gray-600">Maria A.</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-bold">Concluído</span></td>
+                                    <td class="px-6 py-4 font-medium">R$ 300,00</td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="text-gray-400 hover:text-gray-600 font-bold">Recibo</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE: CHAT CENTER ================= -->
+        <div id="page-chat-center" class="hidden min-h-full fade-in p-6 h-full">
+            <div class="max-w-6xl mx-auto h-[calc(100vh-140px)] bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden flex">
+
+                <!-- Sidebar Lista -->
+                <div class="w-80 border-r border-gray-200 flex flex-col bg-gray-50">
+                    <div class="p-4 border-b border-gray-200">
+                        <h3 class="font-black text-gray-900 text-lg uppercase">Mensagens</h3>
+                    </div>
+                    <div class="flex-1 overflow-y-auto">
+                        <!-- Chat Item Active -->
+                        <div class="p-4 border-b border-gray-200 bg-white cursor-pointer border-l-4 border-l-orange-500">
+                            <div class="flex justify-between mb-1">
+                                <span class="font-bold text-gray-900">Zé Silva</span>
+                                <span class="text-xs text-gray-400">10:32</span>
+                            </div>
+                            <p class="text-sm text-gray-500 line-clamp-1">Combinado! O material tá na mão...</p>
+                            <span class="text-[10px] text-blue-600 font-bold mt-2 inline-block bg-blue-50 px-2 py-0.5 rounded">Reboco Muro</span>
+                        </div>
+                         <!-- Chat Item Inactive -->
+                         <div class="p-4 border-b border-gray-200 cursor-pointer hover:bg-gray-100 opacity-60">
+                            <div class="flex justify-between mb-1">
+                                <span class="font-bold text-gray-900">Suporte Rocha</span>
+                                <span class="text-xs text-gray-400">Ontem</span>
+                            </div>
+                            <p class="text-sm text-gray-500 line-clamp-1">Sua conta foi verificada com suc...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="flex-1 flex flex-col relative">
+                    <!-- Header Chat -->
+                    <div class="h-16 border-b border-gray-200 flex items-center justify-between px-6 bg-white">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-orange-100 text-orange-700 rounded-full flex items-center justify-center font-bold">ZS</div>
+                            <div>
+                                <h4 class="font-bold text-gray-900 leading-none">Zé Silva</h4>
+                                <span class="text-xs text-green-600 font-bold flex items-center gap-1 mt-1"><span class="w-2 h-2 bg-green-500 rounded-full"></span> Online</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="text-right hidden md:block">
+                                <p class="text-xs text-gray-400 font-bold uppercase">Valor Retido</p>
+                                <p class="text-lg font-black text-green-600">R$ 450,00</p>
+                            </div>
+                            <button class="text-gray-400 hover:text-gray-900"><i class="ph-bold ph-dots-three-vertical text-xl"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="flex-1 bg-gray-100 p-6 overflow-y-auto space-y-4">
+                        <div class="flex justify-center">
+                            <span class="bg-gray-200 text-gray-600 text-xs px-3 py-1 rounded-full font-bold uppercase">Hoje</span>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <div class="bg-gray-900 text-white p-4 rounded-2xl rounded-tr-sm max-w-md shadow-sm">
+                                <p class="text-sm">Olá Zé! Tudo certo para amanhã?</p>
+                                <span class="text-[10px] text-gray-400 block text-right mt-1">10:30</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-start">
+                            <div class="bg-white text-gray-800 p-4 rounded-2xl rounded-tl-sm max-w-md shadow-sm">
+                                <p class="text-sm">Opa! Tudo certo sim. Chego às 8h.</p>
+                                <span class="text-[10px] text-gray-400 block text-right mt-1">10:31</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input -->
+                    <div class="p-4 bg-white border-t border-gray-200 flex gap-3">
+                        <button class="p-3 rounded-xl hover:bg-gray-100 text-gray-500"><i class="ph-bold ph-paperclip text-xl"></i></button>
+                        <input type="text" placeholder="Digite sua mensagem..." class="flex-1 bg-gray-50 border-0 rounded-xl px-4 focus:ring-2 focus:ring-orange-500 outline-none">
+                        <button class="bg-orange-600 hover:bg-orange-500 text-white p-3 rounded-xl shadow-md transition transform active:scale-95">
+                            <i class="ph-bold ph-paper-plane-right text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ================= MODAL: JOB DETAILS (Worker View) ================= -->
+    <div id="modal-job-details" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4 fade-in">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row">
+
+            <!-- Esquerda: Mapa/Imagem -->
+            <div class="md:w-1/3 bg-gray-100 relative min-h-[200px] md:min-h-full">
+                <div class="absolute inset-0 flex items-center justify-center opacity-10" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"></div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                    <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-2 animate-pulse">
+                        <i class="ph-fill ph-map-pin text-3xl"></i>
+                    </div>
+                    <p class="text-sm font-bold text-gray-500">Vila Oliveira, SP</p>
+                </div>
+            </div>
+
+            <!-- Direita: Detalhes -->
+            <div class="md:w-2/3 p-8 flex flex-col overflow-y-auto">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-3xl font-black text-gray-900 mb-2">Rebocar Parede</h2>
+                        <span class="bg-gray-900 text-white px-3 py-1 rounded-md text-xs font-bold uppercase">Pedreiro</span>
+                    </div>
+                    <button onclick="closeModal('modal-job-details')" class="text-gray-400 hover:text-gray-900"><i class="ph-bold ph-x text-2xl"></i></button>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="border border-gray-200 rounded-xl p-4 text-center">
+                        <p class="text-xs font-bold text-gray-400 uppercase">Valor</p>
+                        <p class="text-2xl font-black text-green-600">R$ 450</p>
+                    </div>
+                    <div class="border border-gray-200 rounded-xl p-4 text-center">
+                        <p class="text-xs font-bold text-gray-400 uppercase">Tamanho</p>
+                        <p class="text-xl font-black text-gray-800">15m²</p>
+                    </div>
+                    <div class="border border-gray-200 rounded-xl p-4 text-center">
+                        <p class="text-xs font-bold text-gray-400 uppercase">Prazo</p>
+                        <p class="text-xl font-black text-gray-800">Amanhã</p>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="font-bold text-gray-900 uppercase text-sm mb-2">Descrição</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Preciso rebocar um muro externo. Tem 3m de altura por 5m de largura. Só mão de obra. O material já está no local. A parede está limpa e pronta para receber a massa.
+                    </p>
+                </div>
+
+                <div class="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between gap-4">
+                    <p class="text-xs text-gray-400 font-bold uppercase flex-1"><i class="ph-fill ph-lock-key text-green-500"></i> Pagamento Garantido</p>
+                    <button onclick="showPage('chat-center'); closeModal('modal-job-details')" class="bg-orange-600 hover:bg-orange-500 text-white px-8 py-4 rounded-xl font-black text-lg shadow-lg transition transform active:scale-95 flex items-center gap-2">
+                        <i class="ph-bold ph-check"></i> PEGAR SERVIÇO
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: POST JOB (Client View) ================= -->
+    <div id="modal-post-job" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4 fade-in">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-black text-gray-900 uppercase">Novo Serviço</h2>
+                <button onclick="closeModal('modal-post-job')" class="text-gray-400 hover:text-gray-900"><i class="ph-bold ph-x text-2xl"></i></button>
+            </div>
+
+            <form onsubmit="event.preventDefault(); closeModal('modal-post-job'); showPage('client-dash');" class="space-y-6">
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-xs uppercase">Título</label>
+                    <input type="text" placeholder="Ex: Rebocar parede" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none font-bold">
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2 text-xs uppercase">Categoria</label>
+                        <select class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 font-medium bg-white">
+                            <option>Pedreiro</option>
+                            <option>Pintor</option>
+                            <option>Eletricista</option>
+                        </select>
+                    </div>
+                    <div>
+                         <label class="block text-gray-700 font-bold mb-2 text-xs uppercase">Valor (R$)</label>
+                         <input type="number" placeholder="0,00" class="w-full p-3 border-2 border-green-200 rounded-lg focus:border-green-500 font-black text-green-700">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 text-xs uppercase">Detalhes</label>
+                    <textarea rows="4" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none"></textarea>
+                </div>
+
+                <div class="bg-orange-50 p-4 rounded-lg flex items-start gap-3">
+                    <i class="ph-fill ph-info text-orange-500 text-xl mt-0.5"></i>
+                    <p class="text-sm text-orange-800 font-medium">Ao publicar, o valor será reservado do seu saldo ou cartão. Só liberamos ao profissional quando você aprovar o serviço.</p>
+                </div>
+
+                <button type="submit" class="w-full bg-gray-900 text-white font-bold py-4 rounded-xl hover:bg-black transition uppercase tracking-wide">
+                    Publicar Vaga
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple Router Logic
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('[id^="page-"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            // Show target page
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+        }
+
+        // Auth Logic Simulation
+        function loginUser(role) {
+            document.getElementById('auth-buttons').classList.add('hidden');
+            document.getElementById('user-menu').classList.remove('hidden');
+            document.getElementById('user-menu').classList.add('flex');
+            document.getElementById('nav-links').classList.remove('hidden');
+            document.getElementById('nav-links').classList.add('flex');
+
+            const roleLabel = document.getElementById('user-role-label');
+            if(role === 'worker') {
+                roleLabel.innerText = 'Mestre Rocha';
+                // Show Worker Feed link, Hide Client Dash link (Simulated via ID manipulation for prototype simplicity)
+            } else {
+                roleLabel.innerText = 'Cliente';
+            }
+        }
+
+        function logout() {
+            document.getElementById('auth-buttons').classList.remove('hidden');
+            document.getElementById('user-menu').classList.add('hidden');
+            document.getElementById('user-menu').classList.remove('flex');
+            document.getElementById('nav-links').classList.add('hidden');
+            document.getElementById('nav-links').classList.remove('flex');
+            showPage('landing');
+        }
+
+        // Modal Logic
+        function openJobModal() {
+            document.getElementById('modal-job-details').classList.remove('hidden');
+        }
+        function openPostJobModal() {
+            document.getElementById('modal-post-job').classList.remove('hidden');
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Start at Landing
+        showPage('landing');
+    </script>
+</body>
+</html>

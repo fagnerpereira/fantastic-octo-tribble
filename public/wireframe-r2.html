@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Trabalho Justo - Wireframe Web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0F172A',  /* Azul Petróleo (Justiça/Base) */
+                            primary: '#EA580C', /* Laranja Segurança (Empoderamento/Ação) */
+                            light: '#F8FAFC',   /* Cinza Gelo (Clareza/Fundo) */
+                            success: '#16A34A', /* Verde (Dinheiro/Sucesso) */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-800 h-screen flex flex-col overflow-hidden">
+
+    <!-- NAV BAR (Fixa no topo - A Base Sólida) -->
+    <nav class="bg-brand-dark text-white h-16 flex items-center justify-between px-6 shadow-lg z-50 shrink-0">
+        <!-- Logo (Placeholder) -->
+        <div class="flex items-center gap-3 cursor-pointer group" onclick="showPage('landing')">
+            <div class="bg-white/10 p-1.5 rounded-lg group-hover:bg-white/20 transition">
+                <i class="ph-fill ph-handshake text-3xl text-brand-primary"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-xl font-black tracking-wider uppercase leading-none">NOME DO APP</span>
+                <span class="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Justiça & Trabalho</span>
+            </div>
+        </div>
+
+        <!-- Menu Central (Visível apenas quando logado) -->
+        <div id="nav-links" class="hidden gap-8 text-sm font-bold uppercase tracking-wide h-full items-end pb-0">
+            <button onclick="showPage('worker-feed')" class="h-full border-b-4 border-transparent hover:text-brand-primary hover:border-brand-primary transition px-2 pb-4 pt-5 text-slate-300">Mural de Vagas</button>
+            <button onclick="showPage('client-dash')" class="h-full border-b-4 border-transparent hover:text-brand-primary hover:border-brand-primary transition px-2 pb-4 pt-5 text-slate-300">Meus Pedidos</button>
+            <button onclick="showPage('chat-center')" class="h-full border-b-4 border-transparent hover:text-brand-primary hover:border-brand-primary transition px-2 pb-4 pt-5 text-slate-300 flex items-center gap-2">
+                Mensagens <span class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full leading-none">1</span>
+            </button>
+        </div>
+
+        <!-- Ações Direita -->
+        <div class="flex items-center gap-4">
+            <div id="auth-buttons" class="flex gap-3">
+                <button onclick="showPage('login')" class="text-sm font-bold text-slate-300 hover:text-white transition">Entrar</button>
+                <button onclick="showPage('register')" class="bg-brand-primary hover:bg-orange-500 text-white px-5 py-2 rounded-lg text-sm font-black transition shadow-md shadow-orange-900/20 uppercase tracking-wide">
+                    Criar Conta
+                </button>
+            </div>
+
+            <!-- User Menu (Escondido no início) -->
+            <div id="user-menu" class="hidden items-center gap-3 border-l border-slate-700 pl-4">
+                <div class="text-right hidden md:block">
+                    <p class="text-sm font-bold leading-none text-white">Zé Silva</p>
+                    <p class="text-xs text-brand-primary font-black uppercase mt-1" id="user-role-label">Profissional</p>
+                </div>
+                <div class="w-10 h-10 bg-brand-primary text-white rounded-full flex items-center justify-center font-bold border-2 border-brand-dark cursor-pointer hover:scale-105 transition shadow-lg">ZS</div>
+                <button onclick="logout()" class="text-slate-400 hover:text-white ml-2"><i class="ph-bold ph-sign-out text-xl"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 overflow-y-auto bg-brand-light relative" id="main-container">
+
+        <!-- ================= PAGE: LANDING ================= -->
+        <div id="page-landing" class="min-h-full flex flex-col fade-in">
+            <!-- Hero Section -->
+            <section class="bg-brand-dark text-white py-24 px-6 text-center relative overflow-hidden flex-1 flex flex-col justify-center">
+                <!-- Pattern de fundo sutil -->
+                <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+
+                <div class="max-w-5xl mx-auto relative z-10">
+                    <div class="inline-flex items-center gap-2 bg-brand-primary/10 border border-brand-primary/30 rounded-full px-4 py-1.5 mb-8 backdrop-blur-sm">
+                        <span class="flex h-2 w-2 rounded-full bg-brand-primary animate-pulse"></span>
+                        <span class="text-brand-primary text-xs font-bold tracking-widest uppercase">Plataforma de Justiça Social</span>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-tight text-white">
+                        TRABALHO DIGNO.<br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-orange-400">PAGAMENTO JUSTO.</span>
+                    </h1>
+                    <p class="text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
+                        Conectando quem precisa construir com quem sabe fazer.
+                        Sem leilão. Sem taxas abusivas. Onde o aperto de mão vale ouro.
+                    </p>
+                    <div class="flex flex-col md:flex-row gap-5 justify-center">
+                        <button onclick="showPage('worker-feed'); loginUser('worker')" class="bg-brand-primary text-white px-10 py-5 rounded-2xl text-lg font-black hover:bg-orange-500 transition shadow-xl shadow-orange-900/30 flex items-center justify-center gap-3 group transform hover:-translate-y-1">
+                            <i class="ph-fill ph-hard-hat text-2xl"></i>
+                            <span>SOU PROFISSIONAL</span>
+                            <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition"></i>
+                        </button>
+                        <button onclick="showPage('client-dash'); loginUser('client')" class="bg-white text-brand-dark px-10 py-5 rounded-2xl text-lg font-black hover:bg-slate-100 transition shadow-xl flex items-center justify-center gap-3 transform hover:-translate-y-1">
+                            <i class="ph-fill ph-house text-2xl text-brand-dark"></i>
+                            <span>SOU CLIENTE</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Values Grid -->
+            <section class="py-24 px-6 bg-white border-t border-slate-200">
+                <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-12">
+                    <div class="p-8 rounded-3xl bg-slate-50 hover:bg-white hover:shadow-xl transition border border-slate-100 hover:border-brand-primary/20 group">
+                        <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-brand-dark group-hover:bg-brand-dark group-hover:text-white transition">
+                            <i class="ph-fill ph-scales text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-black mb-3 text-slate-900">Justiça no Preço</h3>
+                        <p class="text-slate-500 leading-relaxed font-medium">Sem leilão predatório. O valor é fixo e justo para ambos. O trabalhador não paga para ver a vaga.</p>
+                    </div>
+                    <div class="p-8 rounded-3xl bg-slate-50 hover:bg-white hover:shadow-xl transition border border-slate-100 hover:border-brand-primary/20 group">
+                        <div class="w-14 h-14 bg-green-100 rounded-2xl flex items-center justify-center mb-6 text-green-700 group-hover:bg-green-600 group-hover:text-white transition">
+                            <i class="ph-fill ph-shield-check text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-black mb-3 text-slate-900">Segurança Total</h3>
+                        <p class="text-slate-500 leading-relaxed font-medium">O dinheiro fica guardado na plataforma. O trabalhador tem garantia de receber, o cliente tem garantia de entrega.</p>
+                    </div>
+                    <div class="p-8 rounded-3xl bg-slate-50 hover:bg-white hover:shadow-xl transition border border-slate-100 hover:border-brand-primary/20 group">
+                        <div class="w-14 h-14 bg-orange-100 rounded-2xl flex items-center justify-center mb-6 text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition">
+                            <i class="ph-fill ph-hand-heart text-3xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-black mb-3 text-slate-900">Empoderamento</h3>
+                        <p class="text-slate-500 leading-relaxed font-medium">Ferramentas que dignificam o profissional. Perfil verificado, histórico de obras e respeito.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE: WORKER FEED ================= -->
+        <div id="page-worker-feed" class="hidden min-h-full fade-in p-6 md:p-10">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
+                    <div>
+                        <p class="text-slate-500 font-bold uppercase tracking-wide text-sm mb-1">Bem-vindo, Guerreiro</p>
+                        <h2 class="text-4xl font-black text-brand-dark">Mural de Vagas</h2>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="flex gap-2 bg-white p-2 rounded-xl shadow-sm border border-slate-200">
+                        <button class="px-5 py-2.5 bg-brand-dark text-white rounded-lg font-bold text-sm shadow-md transition">Todos</button>
+                        <button class="px-5 py-2.5 text-slate-600 hover:bg-slate-100 rounded-lg font-bold text-sm transition">🧱 Pedreiro</button>
+                        <button class="px-5 py-2.5 text-slate-600 hover:bg-slate-100 rounded-lg font-bold text-sm transition">🎨 Pintor</button>
+                        <button class="px-5 py-2.5 text-slate-600 hover:bg-slate-100 rounded-lg font-bold text-sm transition">⚡ Eletricista</button>
+                    </div>
+                </div>
+
+                <!-- Job Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Job Card 1 -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-2xl hover:border-brand-primary/50 transition group cursor-pointer flex flex-col overflow-hidden transform hover:-translate-y-1 duration-300" onclick="openJobModal()">
+                        <!-- Faixa lateral de status -->
+                        <div class="h-2 bg-brand-primary w-full"></div>
+                        <div class="p-7 flex-1">
+                            <div class="flex justify-between items-start mb-5">
+                                <span class="bg-slate-100 text-slate-600 text-[10px] font-black uppercase px-3 py-1.5 rounded-md tracking-wide border border-slate-200">Pedreiro</span>
+                                <div class="flex items-center gap-1.5 text-brand-primary text-xs font-bold bg-orange-50 px-2 py-1 rounded">
+                                    <i class="ph-fill ph-map-pin"></i> 2km
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-black text-slate-900 mb-3 group-hover:text-brand-primary transition leading-tight">Rebocar Parede Externa</h3>
+                            <p class="text-slate-500 text-sm font-medium line-clamp-3 mb-4 leading-relaxed">
+                                Preciso de um profissional para rebocar um muro de 3m de altura por 5m de largura. O material já está no local.
+                            </p>
+                        </div>
+                        <div class="px-7 py-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-black uppercase tracking-wide">VALOR LÍQUIDO</p>
+                                <p class="text-3xl font-black text-brand-success tracking-tight">R$ 450</p>
+                            </div>
+                            <button class="w-12 h-12 rounded-xl bg-white border-2 border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition shadow-sm">
+                                <i class="ph-bold ph-arrow-right text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Job Card 2 -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-2xl hover:border-brand-primary/50 transition group cursor-pointer flex flex-col overflow-hidden opacity-60 hover:opacity-100">
+                        <div class="h-2 bg-slate-300 w-full"></div>
+                        <div class="p-7 flex-1">
+                            <div class="flex justify-between items-start mb-5">
+                                <span class="bg-slate-100 text-slate-600 text-[10px] font-black uppercase px-3 py-1.5 rounded-md tracking-wide border border-slate-200">Pintor</span>
+                                <div class="flex items-center gap-1.5 text-slate-400 text-xs font-bold bg-slate-50 px-2 py-1 rounded">
+                                    <i class="ph-fill ph-map-pin"></i> 5km
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-black text-slate-900 mb-3 leading-tight">Pintura Apartamento</h3>
+                            <p class="text-slate-500 text-sm font-medium line-clamp-3 mb-4 leading-relaxed">
+                                Pintura completa de sala e dois quartos. Apartamento vazio, fácil acesso.
+                            </p>
+                        </div>
+                        <div class="px-7 py-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-black uppercase tracking-wide">VALOR LÍQUIDO</p>
+                                <p class="text-3xl font-black text-brand-success tracking-tight">R$ 800</p>
+                            </div>
+                            <button class="w-12 h-12 rounded-xl bg-white border-2 border-slate-200 flex items-center justify-center text-slate-400 transition shadow-sm">
+                                <i class="ph-bold ph-arrow-right text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Job Card 3 -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-2xl hover:border-brand-primary/50 transition group cursor-pointer flex flex-col overflow-hidden transform hover:-translate-y-1 duration-300">
+                        <div class="h-2 bg-yellow-500 w-full"></div>
+                        <div class="p-7 flex-1">
+                            <div class="flex justify-between items-start mb-5">
+                                <span class="bg-slate-100 text-slate-600 text-[10px] font-black uppercase px-3 py-1.5 rounded-md tracking-wide border border-slate-200">Eletricista</span>
+                                <div class="flex items-center gap-1.5 text-brand-primary text-xs font-bold bg-orange-50 px-2 py-1 rounded">
+                                    <i class="ph-fill ph-map-pin"></i> 1km
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-black text-slate-900 mb-3 group-hover:text-brand-primary transition leading-tight">Instalar Chuveiro</h3>
+                            <p class="text-slate-500 text-sm font-medium line-clamp-3 mb-4 leading-relaxed">
+                                Troca de fiação e instalação de chuveiro novo.
+                            </p>
+                        </div>
+                        <div class="px-7 py-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-black uppercase tracking-wide">VALOR LÍQUIDO</p>
+                                <p class="text-3xl font-black text-brand-success tracking-tight">R$ 120</p>
+                            </div>
+                            <button class="w-12 h-12 rounded-xl bg-white border-2 border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition shadow-sm">
+                                <i class="ph-bold ph-arrow-right text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE: CLIENT DASHBOARD ================= -->
+        <div id="page-client-dash" class="hidden min-h-full fade-in p-6 md:p-10">
+            <div class="max-w-7xl mx-auto">
+
+                <div class="flex justify-between items-end mb-10">
+                    <div>
+                        <p class="text-slate-500 font-bold uppercase tracking-wide text-sm mb-1">Painel do Cliente</p>
+                        <h2 class="text-3xl font-black text-brand-dark">Gerenciar Obras</h2>
+                    </div>
+                    <button onclick="openPostJobModal()" class="bg-brand-dark hover:bg-slate-800 text-white px-6 py-3.5 rounded-xl font-bold flex items-center gap-2 transition shadow-lg hover:-translate-y-0.5">
+                        <i class="ph-bold ph-plus-circle text-xl text-brand-primary"></i>
+                        <span>NOVO SERVIÇO</span>
+                    </button>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-5 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 w-20 h-20 bg-blue-50 rounded-bl-full -mr-4 -mt-4"></div>
+                        <div class="w-14 h-14 bg-brand-dark text-white rounded-xl flex items-center justify-center text-2xl shadow-md relative z-10"><i class="ph-fill ph-hourglass"></i></div>
+                        <div class="relative z-10">
+                            <p class="text-slate-500 text-xs font-black uppercase tracking-wide">Em Andamento</p>
+                            <p class="text-3xl font-black text-slate-900">1</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-5 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 w-20 h-20 bg-green-50 rounded-bl-full -mr-4 -mt-4"></div>
+                        <div class="w-14 h-14 bg-brand-success text-white rounded-xl flex items-center justify-center text-2xl shadow-md relative z-10"><i class="ph-fill ph-check-circle"></i></div>
+                        <div class="relative z-10">
+                            <p class="text-slate-500 text-xs font-black uppercase tracking-wide">Concluídos</p>
+                            <p class="text-3xl font-black text-slate-900">4</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-5 relative overflow-hidden">
+                        <div class="absolute right-0 top-0 w-20 h-20 bg-orange-50 rounded-bl-full -mr-4 -mt-4"></div>
+                        <div class="w-14 h-14 bg-brand-primary text-white rounded-xl flex items-center justify-center text-2xl shadow-md relative z-10"><i class="ph-fill ph-wallet"></i></div>
+                        <div class="relative z-10">
+                            <p class="text-slate-500 text-xs font-black uppercase tracking-wide">Total Investido</p>
+                            <p class="text-3xl font-black text-slate-900">R$ 2.450</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Jobs Table -->
+                <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+                    <div class="px-8 py-5 border-b border-slate-200 bg-slate-50 flex justify-between items-center">
+                        <h3 class="font-black text-slate-800 uppercase tracking-wide text-sm">Histórico de Serviços</h3>
+                        <button class="text-xs text-brand-primary font-black uppercase hover:underline tracking-wide">Ver Tudo</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-white text-slate-400 uppercase font-black text-[10px] tracking-wider border-b border-slate-100">
+                                <tr>
+                                    <th class="px-8 py-4">Serviço</th>
+                                    <th class="px-8 py-4">Profissional</th>
+                                    <th class="px-8 py-4">Status</th>
+                                    <th class="px-8 py-4">Valor</th>
+                                    <th class="px-8 py-4 text-right">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-slate-50 transition group">
+                                    <td class="px-8 py-5 font-bold text-slate-900">Reboco Muro Externo</td>
+                                    <td class="px-8 py-5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-brand-primary text-white rounded-full flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm">ZS</div>
+                                            <span class="text-slate-700 font-bold">Zé Silva</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-5"><span class="bg-blue-100 text-brand-dark text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-wide">Em Andamento</span></td>
+                                    <td class="px-8 py-5 font-bold text-slate-900">R$ 450,00</td>
+                                    <td class="px-8 py-5 text-right">
+                                        <button onclick="showPage('chat-center')" class="text-slate-400 hover:text-brand-primary transition p-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:shadow-md"><i class="ph-bold ph-chat-centered-text text-lg"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition opacity-60">
+                                    <td class="px-8 py-5 font-bold text-slate-900">Pintura Quarto Bebê</td>
+                                    <td class="px-8 py-5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center text-xs font-bold border-2 border-white shadow-sm">MA</div>
+                                            <span class="text-slate-700 font-bold">Maria A.</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-5"><span class="bg-green-100 text-green-800 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-wide">Concluído</span></td>
+                                    <td class="px-8 py-5 font-bold text-slate-900">R$ 300,00</td>
+                                    <td class="px-8 py-5 text-right">
+                                        <button class="text-slate-400 hover:text-slate-600 font-bold text-xs uppercase">Recibo</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE: CHAT CENTER ================= -->
+        <div id="page-chat-center" class="hidden min-h-full fade-in p-6 h-full">
+            <div class="max-w-6xl mx-auto h-[calc(100vh-140px)] bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden flex">
+
+                <!-- Sidebar Lista -->
+                <div class="w-80 border-r border-slate-200 flex flex-col bg-slate-50">
+                    <div class="p-5 border-b border-slate-200 bg-white">
+                        <h3 class="font-black text-brand-dark text-sm uppercase tracking-wide">Suas Conversas</h3>
+                    </div>
+                    <div class="flex-1 overflow-y-auto">
+                        <!-- Chat Item Active -->
+                        <div class="p-5 border-b border-slate-100 bg-white cursor-pointer border-l-4 border-l-brand-primary relative hover:bg-orange-50/50 transition">
+                            <div class="flex justify-between mb-1">
+                                <span class="font-bold text-slate-900">Zé Silva</span>
+                                <span class="text-[10px] text-slate-400 font-bold">10:32</span>
+                            </div>
+                            <p class="text-xs text-slate-500 line-clamp-1 font-medium">Combinado! O material tá na mão...</p>
+                            <span class="text-[9px] text-blue-700 font-bold mt-2 inline-block bg-blue-50 px-2 py-1 rounded border border-blue-100 uppercase tracking-wide">Reboco Muro</span>
+                        </div>
+                         <!-- Chat Item Inactive -->
+                         <div class="p-5 border-b border-slate-100 cursor-pointer hover:bg-white transition opacity-70">
+                            <div class="flex justify-between mb-1">
+                                <span class="font-bold text-slate-800">Suporte</span>
+                                <span class="text-[10px] text-slate-400 font-bold">Ontem</span>
+                            </div>
+                            <p class="text-xs text-slate-500 line-clamp-1 font-medium">Sua conta foi verificada com suc...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="flex-1 flex flex-col relative bg-slate-50">
+                    <!-- Header Chat -->
+                    <div class="h-20 border-b border-slate-200 flex items-center justify-between px-8 bg-white shadow-sm z-10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center font-bold shadow-md border-2 border-white">ZS</div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 leading-none text-lg">Zé Silva</h4>
+                                <span class="text-xs text-brand-success font-bold flex items-center gap-1.5 mt-1.5"><span class="w-2 h-2 bg-brand-success rounded-full animate-pulse"></span> ONLINE AGORA</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-6">
+                            <div class="text-right hidden md:block bg-green-50 px-4 py-2 rounded-lg border border-green-100">
+                                <p class="text-[10px] text-green-600 font-black uppercase tracking-wide">Valor Retido</p>
+                                <p class="text-xl font-black text-brand-dark">R$ 450,00</p>
+                            </div>
+                            <button class="text-slate-400 hover:text-slate-900"><i class="ph-bold ph-dots-three-vertical text-2xl"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="flex-1 p-8 overflow-y-auto space-y-6" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px;">
+                        <div class="flex justify-center">
+                            <span class="bg-slate-200 text-slate-600 text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-wider shadow-sm">Hoje</span>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <div class="bg-brand-dark text-white p-5 rounded-2xl rounded-tr-sm max-w-md shadow-md relative group">
+                                <p class="text-sm font-medium leading-relaxed">Olá Zé! Tudo certo para começarmos amanhã?</p>
+                                <span class="text-[10px] text-slate-400 block text-right mt-2 font-bold">10:30</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-start">
+                            <div class="bg-white text-slate-800 p-5 rounded-2xl rounded-tl-sm max-w-md shadow-md border border-slate-100">
+                                <p class="text-sm font-medium leading-relaxed">Opa! Tudo certo sim. Chego às 8h sem falta. Já estou com as ferramentas.</p>
+                                <span class="text-[10px] text-slate-400 block text-right mt-2 font-bold">10:31</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input -->
+                    <div class="p-6 bg-white border-t border-slate-200 flex gap-4">
+                        <button class="p-4 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-500 transition border border-slate-200"><i class="ph-bold ph-paperclip text-xl"></i></button>
+                        <input type="text" placeholder="Digite sua mensagem..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-5 focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none font-medium text-slate-700 transition">
+                        <button class="bg-brand-primary hover:bg-orange-600 text-white p-4 rounded-xl shadow-lg transition transform active:scale-95 flex items-center justify-center w-14">
+                            <i class="ph-bold ph-paper-plane-right text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ================= MODAL: JOB DETAILS (Worker View) ================= -->
+    <div id="modal-job-details" class="fixed inset-0 bg-brand-dark/80 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4 fade-in">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row">
+
+            <!-- Esquerda: Mapa/Imagem -->
+            <div class="md:w-2/5 bg-slate-100 relative min-h-[200px] md:min-h-full border-r border-slate-200">
+                <div class="absolute inset-0 flex items-center justify-center opacity-10" style="background-image: radial-gradient(#000 1px, transparent 1px); background-size: 20px 20px;"></div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-10">
+                    <div class="w-20 h-20 bg-orange-100 text-brand-primary rounded-full flex items-center justify-center mb-4 animate-pulse shadow-xl border-4 border-white">
+                        <i class="ph-fill ph-map-pin text-4xl"></i>
+                    </div>
+                    <p class="text-sm font-black text-slate-600 uppercase tracking-wide bg-white px-3 py-1 rounded-full shadow-sm">Vila Oliveira, SP</p>
+                </div>
+                <!-- Botão fechar mobile -->
+                <button onclick="closeModal('modal-job-details')" class="absolute top-4 right-4 md:hidden bg-white/50 p-2 rounded-full"><i class="ph-bold ph-x text-xl"></i></button>
+            </div>
+
+            <!-- Direita: Detalhes -->
+            <div class="md:w-3/5 p-10 flex flex-col overflow-y-auto relative">
+                <button onclick="closeModal('modal-job-details')" class="absolute top-6 right-6 text-slate-300 hover:text-brand-dark transition hidden md:block"><i class="ph-bold ph-x text-2xl"></i></button>
+
+                <div class="mb-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-brand-dark text-white px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-wide">Pedreiro</span>
+                        <span class="text-brand-success text-xs font-bold flex items-center gap-1"><i class="ph-fill ph-clock"></i> Postado há 2h</span>
+                    </div>
+                    <h2 class="text-4xl font-black text-brand-dark mb-2 leading-tight">Rebocar Parede</h2>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 mb-10">
+                    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-wide mb-1">PAGAMENTO</p>
+                        <p class="text-2xl font-black text-brand-success">R$ 450</p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-wide mb-1">TAMANHO</p>
+                        <p class="text-xl font-black text-slate-800">15m²</p>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-center">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-wide mb-1">PRAZO</p>
+                        <p class="text-xl font-black text-slate-800">Amanhã</p>
+                    </div>
+                </div>
+
+                <div class="mb-10">
+                    <h3 class="font-black text-brand-dark uppercase text-xs tracking-wide mb-3 flex items-center gap-2">
+                        <i class="ph-fill ph-info text-brand-primary"></i> O que é pra fazer?
+                    </h3>
+                    <p class="text-slate-600 leading-relaxed font-medium text-lg">
+                        Preciso rebocar um muro externo. Tem 3m de altura por 5m de largura. Só mão de obra. O material já está no local. A parede está limpa e pronta para receber a massa.
+                    </p>
+                </div>
+
+                <div class="mt-auto pt-8 border-t border-slate-100">
+                    <div class="flex items-center justify-between gap-6">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] text-slate-400 font-black uppercase tracking-wide">SEGURANÇA</span>
+                            <span class="text-xs text-brand-dark font-bold flex items-center gap-1"><i class="ph-fill ph-lock-key text-brand-success"></i> Pagamento Garantido</span>
+                        </div>
+                        <button onclick="showPage('chat-center'); closeModal('modal-job-details')" class="bg-brand-primary hover:bg-orange-600 text-white px-10 py-4 rounded-xl font-black text-lg shadow-xl shadow-orange-500/20 transition transform active:scale-95 flex items-center gap-3 flex-1 justify-center">
+                            <i class="ph-bold ph-check-circle text-2xl"></i> PEGAR SERVIÇO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: POST JOB (Client View) ================= -->
+    <div id="modal-post-job" class="fixed inset-0 bg-brand-dark/80 z-50 hidden flex items-center justify-center backdrop-blur-sm p-4 fade-in">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl p-10 relative">
+            <button onclick="closeModal('modal-post-job')" class="absolute top-6 right-6 text-slate-300 hover:text-brand-dark transition"><i class="ph-bold ph-x text-2xl"></i></button>
+
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="text-3xl font-black text-brand-dark uppercase tracking-tight">Novo Serviço</h2>
+                    <p class="text-slate-500 font-medium mt-1">Preencha os dados para encontrar um profissional.</p>
+                </div>
+            </div>
+
+            <form onsubmit="event.preventDefault(); closeModal('modal-post-job'); showPage('client-dash');" class="space-y-6">
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wide">Título do Serviço</label>
+                    <input type="text" placeholder="Ex: Rebocar parede do quintal" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:border-brand-dark focus:outline-none font-bold text-slate-800 placeholder-slate-300 transition">
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wide">Categoria</label>
+                        <div class="relative">
+                            <select class="w-full p-4 border-2 border-slate-200 rounded-xl focus:border-brand-dark font-bold bg-white text-slate-700 appearance-none cursor-pointer outline-none transition">
+                                <option>Pedreiro</option>
+                                <option>Pintor</option>
+                                <option>Eletricista</option>
+                            </select>
+                            <i class="ph-bold ph-caret-down absolute right-4 top-4.5 text-slate-400 pointer-events-none"></i>
+                        </div>
+                    </div>
+                    <div>
+                         <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wide">Valor a Pagar (R$)</label>
+                         <div class="relative">
+                             <span class="absolute left-4 top-4 text-brand-success font-black">R$</span>
+                             <input type="number" placeholder="0,00" class="w-full pl-10 p-4 border-2 border-green-100 bg-green-50/50 rounded-xl focus:border-brand-success font-black text-brand-success text-lg outline-none transition placeholder-green-200">
+                         </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-700 font-bold mb-2 text-xs uppercase tracking-wide">Detalhes e Medidas</label>
+                    <textarea rows="4" class="w-full p-4 border-2 border-slate-200 rounded-xl focus:border-brand-dark focus:outline-none font-medium text-slate-700 placeholder-slate-300 transition resize-none" placeholder="Descreva o tamanho, o que precisa ser feito e se já tem material..."></textarea>
+                </div>
+
+                <div class="bg-orange-50 p-5 rounded-xl flex items-start gap-4 border border-orange-100">
+                    <i class="ph-fill ph-info text-brand-primary text-2xl mt-0.5"></i>
+                    <p class="text-sm text-orange-900 font-medium leading-relaxed">Ao publicar, o valor será <strong>reservado</strong> do seu saldo. Nós só liberamos o pagamento ao profissional quando você confirmar que o serviço foi concluído.</p>
+                </div>
+
+                <button type="submit" class="w-full bg-brand-dark text-white font-black py-5 rounded-xl hover:bg-black transition uppercase tracking-wide shadow-lg flex items-center justify-center gap-2 text-lg group">
+                    Publicar Vaga
+                    <i class="ph-bold ph-arrow-right group-hover:translate-x-1 transition"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple Router Logic
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('[id^="page-"]').forEach(el => {
+                el.classList.add('hidden');
+            });
+
+            // Show target page
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+        }
+
+        // Auth Logic Simulation
+        function loginUser(role) {
+            document.getElementById('auth-buttons').classList.add('hidden');
+            document.getElementById('user-menu').classList.remove('hidden');
+            document.getElementById('user-menu').classList.add('flex');
+            document.getElementById('nav-links').classList.remove('hidden');
+            document.getElementById('nav-links').classList.add('flex');
+
+            const roleLabel = document.getElementById('user-role-label');
+            if(role === 'worker') {
+                roleLabel.innerText = 'Mestre Rocha';
+                roleLabel.className = "text-xs text-brand-primary font-black uppercase mt-1";
+                // Show Worker Feed link, Hide Client Dash link (Simulated via ID manipulation for prototype simplicity)
+            } else {
+                roleLabel.innerText = 'Cliente';
+                roleLabel.className = "text-xs text-slate-300 font-bold uppercase mt-1";
+            }
+        }
+
+        function logout() {
+            document.getElementById('auth-buttons').classList.remove('hidden');
+            document.getElementById('user-menu').classList.add('hidden');
+            document.getElementById('user-menu').classList.remove('flex');
+            document.getElementById('nav-links').classList.add('hidden');
+            document.getElementById('nav-links').classList.remove('flex');
+            showPage('landing');
+        }
+
+        // Modal Logic
+        function openJobModal() {
+            document.getElementById('modal-job-details').classList.remove('hidden');
+        }
+        function openPostJobModal() {
+            document.getElementById('modal-post-job').classList.remove('hidden');
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+
+        // Start at Landing
+        showPage('landing');
+    </script>
+</body>
+</html>

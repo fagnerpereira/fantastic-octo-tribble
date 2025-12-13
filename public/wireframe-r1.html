@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROCHA - Acessível e Justo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0F172A',  /* Azul Petróleo (Justiça) */
+                            primary: '#EA580C', /* Laranja (Ação) */
+                            light: '#F8FAFC',   /* Fundo Limpo */
+                            success: '#16A34A', /* Verde (Dinheiro) */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Botões grandes para toque fácil */
+        .btn-touch { min-height: 48px; }
+    </style>
+</head>
+<body class="text-slate-900 h-screen flex flex-col overflow-hidden selection:bg-brand-primary selection:text-white">
+
+    <!-- NAV BAR (Simples e Alto Contraste) -->
+    <nav class="bg-brand-dark text-white h-20 flex items-center justify-between px-6 shadow-xl z-50 shrink-0">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 cursor-pointer hover:opacity-90 transition" onclick="showPage('landing')">
+            <div class="bg-white/10 p-2 rounded-xl border border-white/10">
+                <i class="ph-fill ph-hexagon text-4xl text-brand-primary"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-2xl font-black tracking-wider uppercase leading-none">ROCHA</span>
+                <span class="text-[10px] text-slate-400 font-bold tracking-widest uppercase mt-1">TRABALHO SÉRIO</span>
+            </div>
+        </div>
+
+        <!-- Menu Central (Ícones Grandes + Texto) -->
+        <div id="nav-links" class="hidden gap-4 h-full items-end pb-0">
+            <button onclick="showPage('worker-feed')" class="h-full border-b-4 border-transparent hover:border-brand-primary hover:bg-white/5 transition px-6 pb-4 pt-2 text-slate-300 flex flex-col items-center justify-center gap-1 group">
+                <i class="ph-bold ph-bricks text-2xl group-hover:text-brand-primary transition"></i>
+                <span class="text-xs font-black uppercase">VAGAS</span>
+            </button>
+            <button onclick="showPage('client-dash')" class="h-full border-b-4 border-transparent hover:border-brand-primary hover:bg-white/5 transition px-6 pb-4 pt-2 text-slate-300 flex flex-col items-center justify-center gap-1 group">
+                <i class="ph-bold ph-clipboard-text text-2xl group-hover:text-brand-primary transition"></i>
+                <span class="text-xs font-black uppercase">OBRAS</span>
+            </button>
+            <button onclick="showPage('chat-center')" class="h-full border-b-4 border-transparent hover:border-brand-primary hover:bg-white/5 transition px-6 pb-4 pt-2 text-slate-300 flex flex-col items-center justify-center gap-1 group relative">
+                <div class="relative">
+                    <i class="ph-bold ph-chat-circle-text text-2xl group-hover:text-brand-primary transition"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-brand-dark">1</span>
+                </div>
+                <span class="text-xs font-black uppercase">CONVERSAS</span>
+            </button>
+        </div>
+
+        <!-- Ações Direita -->
+        <div class="flex items-center gap-4">
+            <!-- Ajuda Zap (Sempre Visível) -->
+            <button class="hidden md:flex bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-full font-bold text-xs items-center gap-2 transition shadow-lg border border-green-400">
+                <i class="ph-fill ph-whatsapp-logo text-xl"></i>
+                AJUDA
+            </button>
+
+            <div id="auth-buttons" class="flex gap-3">
+                <button onclick="showPage('login')" class="text-sm font-bold text-slate-300 hover:text-white px-4 py-2">Entrar</button>
+                <button onclick="showPage('register')" class="bg-brand-primary hover:bg-orange-500 text-white px-6 py-3 rounded-xl text-sm font-black transition shadow-lg shadow-orange-900/20 uppercase tracking-wide flex items-center gap-2">
+                    <i class="ph-bold ph-user-plus"></i> Criar Conta
+                </button>
+            </div>
+
+            <!-- User Menu -->
+            <div id="user-menu" class="hidden items-center gap-4 border-l border-slate-700 pl-6">
+                <div class="text-right hidden md:block">
+                    <p class="text-base font-bold leading-none text-white">Zé Silva</p>
+                    <p class="text-[10px] text-brand-primary font-black uppercase mt-1 tracking-wider" id="user-role-label">MESTRE</p>
+                </div>
+                <div class="w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center font-bold border-4 border-brand-dark cursor-pointer hover:scale-105 transition shadow-lg text-lg">ZS</div>
+                <button onclick="logout()" class="text-slate-400 hover:text-red-400 ml-2 p-2"><i class="ph-bold ph-sign-out text-2xl"></i></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 overflow-y-auto bg-brand-light relative" id="main-container">
+
+        <!-- ================= PAGE: LANDING ================= -->
+        <div id="page-landing" class="min-h-full flex flex-col fade-in">
+            <section class="bg-brand-dark text-white py-20 px-6 text-center relative overflow-hidden flex-1 flex flex-col justify-center">
+                <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23fff\' fill-opacity=\'1\'%3E%3Cpath d=\'M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+
+                <div class="max-w-4xl mx-auto relative z-10">
+                    <h1 class="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-none text-white uppercase">
+                        Trabalho <span class="text-brand-primary">Firme.</span><br>
+                        Dinheiro <span class="text-brand-success">Certo.</span>
+                    </h1>
+                    <p class="text-xl text-slate-300 mb-12 max-w-xl mx-auto font-medium leading-relaxed">
+                        O aplicativo que conecta quem precisa construir com quem sabe fazer. Simples assim.
+                    </p>
+
+                    <!-- Botões Gigantes de Escolha -->
+                    <div class="flex flex-col md:flex-row gap-6 justify-center items-stretch">
+                        <button onclick="showPage('worker-feed'); loginUser('worker')" class="bg-brand-primary text-white px-8 py-8 rounded-3xl text-xl font-black hover:bg-orange-600 transition shadow-2xl border-b-8 border-orange-800 hover:border-orange-700 hover:translate-y-1 active:border-b-0 active:translate-y-2 flex flex-col items-center gap-4 min-w-[280px]">
+                            <div class="bg-white/20 p-4 rounded-full">
+                                <i class="ph-fill ph-hard-hat text-5xl"></i>
+                            </div>
+                            <span>SOU MESTRE</span>
+                            <span class="text-sm font-medium text-orange-100 normal-case opacity-90">Quero pegar serviço</span>
+                        </button>
+
+                        <button onclick="showPage('client-dash'); loginUser('client')" class="bg-white text-brand-dark px-8 py-8 rounded-3xl text-xl font-black hover:bg-slate-100 transition shadow-2xl border-b-8 border-slate-300 hover:border-slate-400 hover:translate-y-1 active:border-b-0 active:translate-y-2 flex flex-col items-center gap-4 min-w-[280px]">
+                            <div class="bg-brand-dark/10 p-4 rounded-full">
+                                <i class="ph-fill ph-house text-5xl text-brand-dark"></i>
+                            </div>
+                            <span>SOU CLIENTE</span>
+                            <span class="text-sm font-medium text-slate-500 normal-case">Preciso de ajuda</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ================= PAGE: WORKER FEED (Mural) ================= -->
+        <div id="page-worker-feed" class="hidden min-h-full fade-in p-4 md:p-8">
+            <div class="max-w-6xl mx-auto">
+                <!-- Header com Saudação de Áudio -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-orange-100 p-3 rounded-full text-brand-primary">
+                            <i class="ph-fill ph-sun text-3xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-slate-500 font-bold text-sm uppercase">Bom dia</p>
+                            <h2 class="text-3xl font-black text-brand-dark">Mestre Zé</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-xl border border-slate-200">
+                        <i class="ph-fill ph-map-pin text-brand-primary text-xl"></i>
+                        <span class="font-bold text-slate-700">Vagas perto de você (2km)</span>
+                    </div>
+                </div>
+
+                <!-- Filtros Visuais -->
+                <div class="flex gap-3 mb-8 overflow-x-auto pb-2">
+                    <button class="bg-brand-dark text-white px-6 py-3 rounded-xl font-bold shadow-lg whitespace-nowrap">Tudo</button>
+                    <button class="bg-white text-slate-600 border-2 border-slate-200 hover:border-brand-primary px-6 py-3 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap transition">
+                        🧱 Pedreiro
+                    </button>
+                    <button class="bg-white text-slate-600 border-2 border-slate-200 hover:border-brand-primary px-6 py-3 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap transition">
+                        🎨 Pintor
+                    </button>
+                </div>
+
+                <!-- Job Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    <!-- Card de Vaga (Acessível) -->
+                    <div class="bg-white rounded-3xl border-2 border-slate-100 shadow-sm hover:shadow-xl hover:border-brand-primary transition cursor-pointer overflow-hidden group transform hover:-translate-y-1" onclick="openJobModal()">
+                        <div class="h-3 bg-brand-primary w-full"></div>
+                        <div class="p-6">
+                            <!-- Tag Visual -->
+                            <div class="flex justify-between mb-4">
+                                <div class="bg-brand-dark text-white px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wide">Pedreiro</div>
+                                <span class="text-xs font-bold text-slate-400">Postado agora</span>
+                            </div>
+
+                            <!-- Título Gigante -->
+                            <h3 class="text-2xl font-black text-slate-900 mb-2 leading-tight">Rebocar Parede</h3>
+
+                            <!-- Resumo Visual -->
+                            <div class="flex gap-2 mb-4">
+                                <div class="bg-slate-100 px-2 py-1 rounded-md flex items-center gap-1 text-xs font-bold text-slate-600">
+                                    <i class="ph-bold ph-ruler"></i> 15m²
+                                </div>
+                                <div class="bg-slate-100 px-2 py-1 rounded-md flex items-center gap-1 text-xs font-bold text-slate-600">
+                                    <i class="ph-bold ph-package"></i> Material OK
+                                </div>
+                            </div>
+
+                            <!-- Botão Ouvir -->
+                            <button onclick="event.stopPropagation(); alert('Tocando áudio da descrição...')" class="w-full bg-slate-50 hover:bg-slate-100 text-brand-dark py-3 rounded-xl font-bold flex items-center justify-center gap-2 mb-4 border border-slate-200 transition">
+                                <i class="ph-fill ph-speaker-high text-xl text-brand-primary"></i>
+                                OUVIR O QUE É
+                            </button>
+                        </div>
+
+                        <!-- Preço Destaque -->
+                        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-black uppercase">PAGA</p>
+                                <p class="text-3xl font-black text-brand-success">R$ 450</p>
+                            </div>
+                            <div class="bg-white border-2 border-slate-200 w-12 h-12 rounded-full flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition">
+                                <i class="ph-bold ph-arrow-right text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white rounded-3xl border-2 border-slate-100 shadow-sm hover:shadow-xl hover:border-brand-primary transition cursor-pointer overflow-hidden group transform hover:-translate-y-1 opacity-70">
+                        <div class="h-3 bg-slate-300 w-full"></div>
+                        <div class="p-6">
+                            <div class="flex justify-between mb-4">
+                                <div class="bg-blue-900 text-white px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wide">Pintor</div>
+                                <span class="text-xs font-bold text-slate-400">Há 1h</span>
+                            </div>
+                            <h3 class="text-2xl font-black text-slate-900 mb-2">Pintar Sala</h3>
+                            <div class="flex gap-2 mb-4">
+                                <div class="bg-slate-100 px-2 py-1 rounded-md flex items-center gap-1 text-xs font-bold text-slate-600">
+                                    <i class="ph-bold ph-house"></i> Interior
+                                </div>
+                            </div>
+                            <button class="w-full bg-slate-50 py-3 rounded-xl font-bold flex items-center justify-center gap-2 mb-4 border border-slate-200 text-slate-400">
+                                <i class="ph-fill ph-speaker-high text-xl"></i>
+                                OUVIR
+                            </button>
+                        </div>
+                        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-black uppercase">PAGA</p>
+                                <p class="text-3xl font-black text-brand-success">R$ 300</p>
+                            </div>
+                            <div class="bg-white border-2 border-slate-200 w-12 h-12 rounded-full flex items-center justify-center">
+                                <i class="ph-bold ph-arrow-right text-xl text-slate-300"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE: CLIENT DASHBOARD ================= -->
+        <div id="page-client-dash" class="hidden min-h-full fade-in p-4 md:p-8">
+            <div class="max-w-6xl mx-auto">
+
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl font-black text-brand-dark">Minhas Obras</h2>
+                    </div>
+                    <button onclick="openPostJobModal()" class="bg-brand-dark text-white px-8 py-4 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-xl hover:scale-105 transition">
+                        <i class="ph-bold ph-plus-circle text-2xl text-brand-primary"></i>
+                        <span class="text-lg">PEDIR SERVIÇO</span>
+                    </button>
+                </div>
+
+                <!-- Cards de Status -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-5">
+                        <div class="w-16 h-16 bg-blue-50 text-brand-dark rounded-2xl flex items-center justify-center text-3xl"><i class="ph-fill ph-hourglass"></i></div>
+                        <div>
+                            <p class="text-slate-500 text-xs font-black uppercase tracking-wide">Fazendo Agora</p>
+                            <p class="text-4xl font-black text-slate-900">1</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center gap-5">
+                        <div class="w-16 h-16 bg-green-50 text-brand-success rounded-2xl flex items-center justify-center text-3xl"><i class="ph-fill ph-check-circle"></i></div>
+                        <div>
+                            <p class="text-slate-500 text-xs font-black uppercase tracking-wide">Terminados</p>
+                            <p class="text-4xl font-black text-slate-900">4</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista Simples -->
+                <div class="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 bg-slate-50">
+                        <h3 class="font-black text-slate-800 uppercase">Serviços Ativos</h3>
+                    </div>
+                    <div class="divide-y divide-slate-100">
+                        <div class="p-6 flex flex-col md:flex-row items-center justify-between gap-4 hover:bg-slate-50 transition">
+                            <div class="flex items-center gap-4 w-full md:w-auto">
+                                <div class="w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center font-bold text-lg border-4 border-orange-100">ZS</div>
+                                <div>
+                                    <h4 class="text-xl font-black text-slate-900">Reboco Muro</h4>
+                                    <p class="text-slate-500 font-medium">Mestre Zé Silva</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+                                <div class="text-right">
+                                    <p class="text-xs font-bold text-slate-400 uppercase">VALOR</p>
+                                    <p class="text-xl font-black text-slate-900">R$ 450</p>
+                                </div>
+                                <button onclick="showPage('chat-center')" class="bg-brand-dark text-white p-3 rounded-xl hover:bg-slate-800 transition">
+                                    <i class="ph-bold ph-chat-text text-2xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE: CHAT CENTER (Voz e Imagem) ================= -->
+        <div id="page-chat-center" class="hidden min-h-full fade-in p-4 h-full">
+            <div class="max-w-5xl mx-auto h-[calc(100vh-120px)] bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden flex flex-col md:flex-row">
+
+                <!-- Lista (Esquerda) -->
+                <div class="w-full md:w-80 border-r border-slate-200 flex flex-col bg-slate-50 hidden md:flex">
+                    <div class="p-5 border-b border-slate-200 bg-white">
+                        <h3 class="font-black text-brand-dark text-sm uppercase">Conversas</h3>
+                    </div>
+                    <div class="p-4 bg-white border-l-4 border-brand-primary">
+                        <div class="flex justify-between mb-1">
+                            <span class="font-bold text-lg text-slate-900">Mestre Zé</span>
+                            <i class="ph-fill ph-microphone text-brand-primary animate-pulse"></i>
+                        </div>
+                        <p class="text-sm text-slate-500 font-medium">Áudio recebido (0:12)</p>
+                    </div>
+                </div>
+
+                <!-- Área de Chat -->
+                <div class="flex-1 flex flex-col relative bg-slate-50">
+                    <!-- Header -->
+                    <div class="h-20 border-b border-slate-200 flex items-center justify-between px-6 bg-white shadow-sm z-10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 bg-brand-primary text-white rounded-full flex items-center justify-center font-bold text-lg border-4 border-white shadow-sm">ZS</div>
+                            <div>
+                                <h4 class="font-black text-slate-900 text-xl leading-none">Mestre Zé</h4>
+                                <span class="text-xs text-brand-success font-bold uppercase">Online</span>
+                            </div>
+                        </div>
+                        <div class="bg-green-100 px-4 py-2 rounded-xl border border-green-200">
+                            <p class="text-[10px] text-green-800 font-black uppercase text-center">Dinheiro Seguro</p>
+                            <p class="text-xl font-black text-brand-dark text-center leading-none">R$ 450</p>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="flex-1 p-6 overflow-y-auto space-y-6">
+                        <!-- Áudio Recebido -->
+                        <div class="flex justify-start">
+                            <div class="bg-white p-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-200 max-w-[85%]">
+                                <p class="text-xs font-bold text-slate-400 mb-2 uppercase flex items-center gap-1"><i class="ph-fill ph-microphone"></i> Mestre Zé falou:</p>
+                                <div class="flex items-center gap-3 bg-slate-100 p-3 rounded-xl w-64">
+                                    <button class="w-10 h-10 bg-brand-primary text-white rounded-full flex items-center justify-center shadow-md">
+                                        <i class="ph-fill ph-play text-xl pl-1"></i>
+                                    </button>
+                                    <div class="h-1 bg-slate-300 flex-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-brand-primary w-1/3"></div>
+                                    </div>
+                                    <span class="text-xs font-bold text-slate-500">0:12</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Minha Resposta -->
+                        <div class="flex justify-end">
+                            <div class="bg-brand-dark text-white p-4 rounded-2xl rounded-tr-none shadow-md max-w-[85%]">
+                                <p class="text-lg font-medium">Combinado! Pode vir.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Gigante -->
+                    <div class="p-4 bg-white border-t border-slate-200 flex gap-3 items-center">
+                        <button class="w-14 h-14 bg-slate-100 rounded-2xl text-slate-500 hover:bg-slate-200 transition flex items-center justify-center border-2 border-slate-200">
+                            <i class="ph-bold ph-camera text-2xl"></i>
+                        </button>
+
+                        <!-- Botão de Gravar (Destaque) -->
+                        <button class="flex-1 bg-brand-primary hover:bg-orange-600 text-white h-14 rounded-2xl font-black text-lg shadow-lg flex items-center justify-center gap-2 transition active:scale-95">
+                            <i class="ph-fill ph-microphone text-2xl"></i>
+                            GRAVAR ÁUDIO
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ================= MODAL: JOB DETAILS (Acessível) ================= -->
+    <div id="modal-job-details" class="fixed inset-0 bg-brand-dark/90 z-50 hidden flex items-center justify-center p-4 fade-in backdrop-blur-sm">
+        <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden relative">
+
+            <!-- Botão Fechar -->
+            <button onclick="closeModal('modal-job-details')" class="absolute top-4 right-4 bg-slate-100 p-3 rounded-full text-slate-500 hover:bg-red-100 hover:text-red-600 transition z-10">
+                <i class="ph-bold ph-x text-2xl"></i>
+            </button>
+
+            <!-- Conteúdo -->
+            <div class="p-8 flex flex-col gap-6">
+                <!-- Cabeçalho -->
+                <div>
+                    <div class="bg-brand-dark text-white w-fit px-4 py-1 rounded-lg text-xs font-black uppercase mb-3">Pedreiro</div>
+                    <h2 class="text-4xl font-black text-slate-900 leading-none mb-2">Rebocar Parede</h2>
+                    <div class="flex items-center gap-2 text-slate-500 font-bold text-lg">
+                        <i class="ph-fill ph-map-pin text-brand-primary"></i> Vila Oliveira
+                    </div>
+                </div>
+
+                <!-- Preço em Destaque -->
+                <div class="bg-green-50 border-2 border-green-100 p-6 rounded-2xl text-center">
+                    <p class="text-xs font-black text-green-800 uppercase tracking-widest mb-1">VOCÊ RECEBE</p>
+                    <p class="text-5xl font-black text-brand-success tracking-tighter">R$ 450</p>
+                    <p class="text-xs font-bold text-green-600 mt-2 bg-white/50 inline-block px-2 py-1 rounded"><i class="ph-fill ph-lock-key"></i> Garantido pelo App</p>
+                </div>
+
+                <!-- Botão Ouvir Descrição -->
+                <button onclick="alert('Ouvindo...')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 p-4 rounded-2xl font-bold flex items-center gap-4 transition border-2 border-slate-200 text-left group">
+                    <div class="bg-white p-3 rounded-full shadow-sm group-hover:scale-110 transition">
+                        <i class="ph-fill ph-speaker-high text-2xl text-brand-primary"></i>
+                    </div>
+                    <div>
+                        <span class="block text-xs uppercase font-black text-slate-400">CLIQUE PRA OUVIR</span>
+                        <span class="text-lg">O que precisa fazer?</span>
+                    </div>
+                </button>
+
+                <!-- Botão Ação -->
+                <button onclick="showPage('chat-center'); closeModal('modal-job-details')" class="bg-brand-primary text-white w-full py-6 rounded-2xl font-black text-2xl shadow-xl shadow-orange-500/30 hover:bg-orange-600 hover:scale-[1.02] transition flex items-center justify-center gap-3">
+                    <i class="ph-bold ph-check-circle"></i>
+                    PEGAR SERVIÇO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: POST JOB (Cliente) ================= -->
+    <div id="modal-post-job" class="fixed inset-0 bg-brand-dark/90 z-50 hidden flex items-center justify-center p-4 fade-in">
+        <div class="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg p-8 relative">
+            <button onclick="closeModal('modal-post-job')" class="absolute top-6 right-6 text-slate-300 hover:text-slate-900"><i class="ph-bold ph-x text-3xl"></i></button>
+
+            <h2 class="text-3xl font-black text-brand-dark uppercase mb-6">Novo Serviço</h2>
+
+            <form onsubmit="event.preventDefault(); closeModal('modal-post-job'); showPage('client-dash');" class="space-y-6">
+                <div>
+                    <label class="block text-slate-500 font-bold mb-2 text-xs uppercase tracking-wide">Título</label>
+                    <input type="text" placeholder="Ex: Rebocar parede" class="w-full p-4 border-2 border-slate-200 rounded-xl text-xl font-bold text-slate-900 focus:border-brand-primary outline-none">
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="flex-1">
+                         <label class="block text-slate-500 font-bold mb-2 text-xs uppercase tracking-wide">Valor (R$)</label>
+                         <input type="number" placeholder="0,00" class="w-full p-4 border-2 border-green-200 rounded-xl text-2xl font-black text-green-700 focus:border-green-500 outline-none bg-green-50">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-end mb-2">
+                        <label class="block text-slate-500 font-bold text-xs uppercase tracking-wide">Detalhes</label>
+                        <button type="button" class="text-brand-primary text-xs font-black flex items-center gap-1"><i class="ph-fill ph-microphone"></i> GRAVAR ÁUDIO</button>
+                    </div>
+                    <textarea rows="3" class="w-full p-4 border-2 border-slate-200 rounded-xl text-lg font-medium focus:border-brand-primary outline-none resize-none" placeholder="Explique o serviço..."></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-brand-dark text-white font-black py-5 rounded-2xl text-xl hover:bg-black transition shadow-lg flex items-center justify-center gap-2">
+                    PUBLICAR AGORA
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple Router Logic
+        function showPage(pageId) {
+            document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) target.classList.remove('hidden');
+        }
+
+        // Auth Simulation
+        function loginUser(role) {
+            document.getElementById('auth-buttons').classList.add('hidden');
+            document.getElementById('user-menu').classList.remove('hidden');
+            document.getElementById('user-menu').classList.add('flex');
+            document.getElementById('nav-links').classList.remove('hidden');
+            document.getElementById('nav-links').classList.add('flex');
+
+            const roleLabel = document.getElementById('user-role-label');
+            if(role === 'worker') {
+                roleLabel.innerText = 'MESTRE';
+                roleLabel.className = "text-[10px] text-brand-primary font-black uppercase mt-1 tracking-wider";
+            } else {
+                roleLabel.innerText = 'CLIENTE';
+                roleLabel.className = "text-[10px] text-slate-400 font-bold uppercase mt-1 tracking-wider";
+            }
+        }
+
+        function logout() {
+            document.getElementById('auth-buttons').classList.remove('hidden');
+            document.getElementById('user-menu').classList.add('hidden');
+            document.getElementById('user-menu').classList.remove('flex');
+            document.getElementById('nav-links').classList.add('hidden');
+            document.getElementById('nav-links').classList.remove('flex');
+            showPage('landing');
+        }
+
+        function openJobModal() { document.getElementById('modal-job-details').classList.remove('hidden'); }
+        function openPostJobModal() { document.getElementById('modal-post-job').classList.remove('hidden'); }
+        function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); }
+
+        showPage('landing');
+    </script>
+</body>
+</html>

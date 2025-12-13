@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe - App Pedreiros (Worker First)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones Phosphor para visualização rápida -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        /* Estilos para simular a tela de celular */
+        body {
+            background-color: #f3f4f6; /* Gray 100 */
+            font-family: sans-serif;
+        }
+        .mobile-screen {
+            max-width: 400px;
+            height: 850px;
+            margin: 20px auto;
+            background-color: white;
+            border: 12px solid #1f2937; /* Gray 800 - Phone Border */
+            border-radius: 30px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        /* Esconder barra de rolagem mas permitir scroll */
+        .mobile-screen::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+        .screen-content {
+            display: none; /* Esconde todas as telas por padrão */
+            flex: 1;
+            flex-direction: column;
+        }
+        .screen-content.active {
+            display: flex; /* Mostra a tela ativa */
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bottom-nav {
+            border-top: 1px solid #e5e7eb;
+            padding: 10px 0;
+            background: white;
+            position: sticky;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Controle de Navegação do Protótipo (Apenas para você testar) -->
+    <div class="fixed top-4 left-4 bg-white p-4 rounded shadow-lg z-50 hidden md:block">
+        <h3 class="font-bold text-gray-800 mb-2">Controle do Wireframe</h3>
+        <p class="text-sm text-gray-600 mb-4">Clique para pular telas:</p>
+        <div class="flex flex-col space-y-2">
+            <button onclick="showScreen('client-home')" class="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded text-sm text-left">👤 Cliente: Home</button>
+            <button onclick="showScreen('client-post')" class="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded text-sm text-left">👤 Cliente: Postar Vaga</button>
+            <div class="h-px bg-gray-300 my-2"></div>
+            <button onclick="showScreen('worker-feed')" class="px-3 py-1 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded text-sm text-left">👷 Trabalhador: Mural (Feed)</button>
+            <button onclick="showScreen('worker-details')" class="px-3 py-1 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded text-sm text-left">👷 Trabalhador: Detalhes</button>
+            <div class="h-px bg-gray-300 my-2"></div>
+            <button onclick="showScreen('chat-screen')" class="px-3 py-1 bg-green-100 hover:bg-green-200 text-green-800 rounded text-sm text-left">💬 Chat / Contrato Ativo</button>
+        </div>
+    </div>
+
+    <!-- A TELA DO CELULAR -->
+    <div class="mobile-screen">
+
+        <!-- HEADER FIXO (Muda conforme o contexto) -->
+        <header id="app-header" class="bg-blue-600 text-white p-4 shadow-md z-10 sticky top-0">
+            <div class="flex justify-between items-center">
+                <h1 id="header-title" class="text-xl font-bold">Mural de Vagas</h1>
+                <div class="w-8 h-8 bg-blue-800 rounded-full flex items-center justify-center text-sm">
+                    JS
+                </div>
+            </div>
+        </header>
+
+        <!-- ========================================== -->
+        <!-- TELA 1: CLIENTE - HOME (Meus Pedidos) -->
+        <!-- ========================================== -->
+        <div id="client-home" class="screen-content p-4 bg-gray-50">
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+                <p class="font-bold">Bem-vindo, Cliente</p>
+                <p class="text-sm">Você tem 1 serviço em andamento.</p>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-gray-800">Meus Serviços</h2>
+                <button onclick="showScreen('client-post')" class="bg-blue-600 text-white px-4 py-2 rounded-full shadow font-bold text-sm flex items-center gap-2">
+                    <i class="ph ph-plus"></i> Novo
+                </button>
+            </div>
+
+            <!-- Lista de Serviços -->
+            <div class="space-y-4">
+                <!-- Card: Em Andamento -->
+                <div class="bg-white p-4 rounded-lg shadow border border-blue-200 cursor-pointer" onclick="showScreen('chat-screen')">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-gray-800">Reparo Hidráulico</h3>
+                        <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded">Em Andamento</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">Vila Mariana • R$ 150</p>
+                    <div class="mt-3 flex items-center gap-2">
+                        <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+                        <span class="text-sm text-gray-600">José Silva (Encanador)</span>
+                    </div>
+                </div>
+
+                <!-- Card: Concluído -->
+                <div class="bg-white p-4 rounded-lg shadow border border-gray-200 opacity-70">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-bold text-gray-800">Pintura Sala</h3>
+                        <span class="bg-gray-200 text-gray-600 text-xs font-bold px-2 py-1 rounded">Concluído</span>
+                    </div>
+                    <p class="text-gray-500 text-sm mt-1">12 Jan • R$ 400</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TELA 2: CLIENTE - POSTAR VAGA -->
+        <!-- ========================================== -->
+        <div id="client-post" class="screen-content p-4 bg-white">
+            <div class="mb-6">
+                <button onclick="showScreen('client-home')" class="text-blue-600 font-bold text-sm mb-2 flex items-center gap-1">
+                    <i class="ph ph-arrow-left"></i> Voltar
+                </button>
+                <h2 class="text-2xl font-bold text-gray-800">O que você precisa?</h2>
+                <p class="text-gray-500 text-sm">Seja específico para encontrar o profissional certo rápido.</p>
+            </div>
+
+            <form class="space-y-6" onsubmit="event.preventDefault(); showScreen('worker-feed');">
+
+                <!-- Título -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Título do Serviço</label>
+                    <input type="text" placeholder="Ex: Rebocar parede externa" class="w-full p-4 border-2 border-gray-300 rounded-lg text-lg focus:border-blue-500 focus:outline-none">
+                </div>
+
+                <!-- Descrição -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Descrição Detalhada</label>
+                    <textarea rows="4" placeholder="Preciso rebocar um muro de 3m de altura por 5m de largura..." class="w-full p-4 border-2 border-gray-300 rounded-lg text-base focus:border-blue-500 focus:outline-none"></textarea>
+                </div>
+
+                <!-- Preço Fixo (O Flip do Modelo) -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2 flex justify-between">
+                        <span>Valor que vou pagar</span>
+                        <span class="text-green-600 text-sm bg-green-50 px-2 py-1 rounded">Sem leilão</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-4 text-gray-500 font-bold">R$</span>
+                        <input type="number" placeholder="0,00" class="w-full pl-12 p-4 border-2 border-green-200 bg-green-50 rounded-lg text-xl font-bold text-green-800 focus:border-green-500 focus:outline-none">
+                    </div>
+                    <p class="text-xs text-gray-500 mt-2">💡 Sugestão baseada no mercado: R$ 300 - R$ 450</p>
+                </div>
+
+                <!-- Botão Principal -->
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold text-xl py-4 rounded-xl shadow-lg hover:bg-blue-700 transition transform active:scale-95">
+                        Publicar Vaga
+                    </button>
+                    <p class="text-center text-xs text-gray-400 mt-4">Ao publicar, o valor fica reservado com segurança.</p>
+                </div>
+            </form>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TELA 3: TRABALHADOR - FEED (MURAL) -->
+        <!-- ========================================== -->
+        <div id="worker-feed" class="screen-content p-4 bg-gray-100">
+            <!-- Filtros Rápidos -->
+            <div class="flex gap-2 overflow-x-auto pb-4 mb-2 no-scrollbar">
+                <button class="bg-blue-600 text-white px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap">Todas</button>
+                <button class="bg-white text-gray-600 border border-gray-300 px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap">Pedreiro</button>
+                <button class="bg-white text-gray-600 border border-gray-300 px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap">Pintor</button>
+                <button class="bg-white text-gray-600 border border-gray-300 px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap">Eletricista</button>
+            </div>
+
+            <h2 class="text-gray-500 font-bold text-sm mb-4 uppercase tracking-wide">Próximo a você (2km)</h2>
+
+            <div class="space-y-4 pb-20">
+
+                <!-- CARD 1 (A Vaga Principal) -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border-2 border-transparent hover:border-blue-500 transition cursor-pointer" onclick="showScreen('worker-details')">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded uppercase">Pedreiro</span>
+                            <span class="text-gray-400 text-xs font-bold flex items-center gap-1">
+                                <i class="ph ph-map-pin"></i> 1.2km
+                            </span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">Rebocar Parede Externa</h3>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">Muro de 3 metros de altura por 5 de largura. Material já está no local.</p>
+
+                        <div class="border-t border-gray-100 pt-4 flex justify-between items-center">
+                            <div>
+                                <p class="text-xs text-gray-400 font-bold uppercase">Valor Fixo</p>
+                                <p class="text-2xl font-bold text-green-600">R$ 450</p>
+                            </div>
+                            <button class="bg-gray-100 text-gray-600 p-2 rounded-full">
+                                <i class="ph ph-caret-right text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2 -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden border-2 border-transparent">
+                    <div class="p-5 opacity-60"> <!-- Opacidade para simular que não é o foco -->
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded uppercase">Pintor</span>
+                            <span class="text-gray-400 text-xs font-bold flex items-center gap-1">
+                                <i class="ph ph-map-pin"></i> 3.5km
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Pintura 2 Quartos</h3>
+
+                        <div class="border-t border-gray-100 pt-4 mt-2 flex justify-between items-center">
+                            <div>
+                                <p class="text-2xl font-bold text-green-600">R$ 300</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TELA 4: TRABALHADOR - DETALHES (CLAIM) -->
+        <!-- ========================================== -->
+        <div id="worker-details" class="screen-content bg-white relative">
+
+            <!-- Mapa (Simulado) -->
+            <div class="h-48 bg-gray-200 relative w-full">
+                <div class="absolute inset-0 flex items-center justify-center text-gray-400 font-bold">
+                    [MAPA DA REGIÃO]
+                </div>
+                <button onclick="showScreen('worker-feed')" class="absolute top-4 left-4 bg-white/90 p-2 rounded-full shadow text-gray-800">
+                    <i class="ph ph-arrow-left text-xl"></i>
+                </button>
+            </div>
+
+            <div class="p-6 -mt-6 bg-white rounded-t-3xl relative z-10 flex-1 flex flex-col">
+                <!-- Cabeçalho do Job -->
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 leading-tight mb-1">Rebocar Parede Externa</h2>
+                        <p class="text-gray-500">Vila Oliveira • Postado há 20min</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-3xl font-bold text-green-600">R$ 450</p>
+                        <p class="text-xs text-gray-400">À vista via App</p>
+                    </div>
+                </div>
+
+                <!-- Descrição -->
+                <div class="space-y-4 mb-8">
+                    <div>
+                        <h3 class="font-bold text-gray-900 mb-2">O que precisa fazer?</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            Preciso de um pedreiro para rebocar um muro externo. O muro tem 3m de altura e 5m de comprimento. A areia e o cimento já estão comprados e no local. Preciso apenas da mão de obra.
+                        </p>
+                    </div>
+
+                    <div class="flex gap-4">
+                         <div class="bg-gray-100 p-3 rounded-lg text-center w-1/3">
+                            <i class="ph ph-ruler text-2xl text-blue-600 mb-1"></i>
+                            <p class="text-xs font-bold text-gray-600">15m²</p>
+                         </div>
+                         <div class="bg-gray-100 p-3 rounded-lg text-center w-1/3">
+                            <i class="ph ph-package text-2xl text-blue-600 mb-1"></i>
+                            <p class="text-xs font-bold text-gray-600">Material Incluso</p>
+                         </div>
+                         <div class="bg-gray-100 p-3 rounded-lg text-center w-1/3">
+                            <i class="ph ph-calendar text-2xl text-blue-600 mb-1"></i>
+                            <p class="text-xs font-bold text-gray-600">Para Amanhã</p>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Área de Ação (Footer fixo dentro do scroll se necessário, mas aqui no final) -->
+                <div class="mt-auto pt-4 border-t border-gray-100">
+                    <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4 flex gap-3 items-start">
+                        <i class="ph ph-warning-circle text-yellow-600 text-xl mt-0.5"></i>
+                        <p class="text-xs text-yellow-800 leading-snug">
+                            <strong>Atenção:</strong> Ao clicar em aceitar, você se compromete a ir ao local. O valor já está garantido pela plataforma.
+                        </p>
+                    </div>
+                    <button onclick="showScreen('chat-screen')" class="w-full bg-green-600 text-white font-bold text-xl py-4 rounded-xl shadow-lg hover:bg-green-700 transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i class="ph ph-check-circle text-2xl"></i> PEGAR TRABALHO
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TELA 5: CHAT / CONTRATO ATIVO -->
+        <!-- ========================================== -->
+        <div id="chat-screen" class="screen-content bg-gray-100 flex flex-col h-full">
+            <!-- Header do Chat -->
+            <div class="bg-white p-4 shadow-sm flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center gap-3">
+                    <button onclick="showScreen('worker-feed')" class="text-gray-500">
+                        <i class="ph ph-arrow-left text-xl"></i>
+                    </button>
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                        CL
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-sm">Cliente (João)</h3>
+                        <p class="text-xs text-green-600 font-bold">● Serviço Ativo</p>
+                    </div>
+                </div>
+                <button class="text-gray-400"><i class="ph ph-dots-three-vertical text-xl"></i></button>
+            </div>
+
+            <!-- Status Bar -->
+            <div class="bg-blue-50 px-4 py-2 text-center border-b border-blue-100">
+                <p class="text-xs text-blue-800 font-bold">💰 R$ 450,00 retidos em segurança</p>
+            </div>
+
+            <!-- Área de Mensagens -->
+            <div class="flex-1 p-4 space-y-4 overflow-y-auto">
+                <!-- Msg Sistema -->
+                <div class="flex justify-center">
+                    <span class="bg-gray-200 text-gray-600 text-xs px-3 py-1 rounded-full">Você aceitou o trabalho. Diga oi!</span>
+                </div>
+
+                <!-- Msg Eu (Trabalhador) -->
+                <div class="flex justify-end">
+                    <div class="bg-blue-600 text-white p-3 rounded-l-xl rounded-br-xl max-w-[80%] shadow-sm">
+                        <p class="text-sm">Olá, João! Acabei de pegar o serviço. Posso chegar amanhã às 08:00?</p>
+                        <span class="text-[10px] text-blue-200 block text-right mt-1">10:30</span>
+                    </div>
+                </div>
+
+                <!-- Msg Cliente -->
+                <div class="flex justify-start">
+                    <div class="bg-white text-gray-800 p-3 rounded-r-xl rounded-bl-xl max-w-[80%] shadow-sm border border-gray-200">
+                        <p class="text-sm">Oi! Perfeito. O endereço está correto no mapa. Aguardo você.</p>
+                        <span class="text-[10px] text-gray-400 block text-right mt-1">10:32</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="bg-white p-3 border-t border-gray-200 flex gap-2 items-center">
+                <button class="p-2 text-gray-500 bg-gray-100 rounded-full">
+                    <i class="ph ph-camera text-xl"></i>
+                </button>
+                <input type="text" placeholder="Digite uma mensagem..." class="flex-1 bg-gray-100 border-0 rounded-full px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                <button class="p-2 bg-blue-600 text-white rounded-full shadow-md">
+                    <i class="ph ph-paper-plane-right text-xl"></i>
+                </button>
+            </div>
+             <!-- Botões de Ação do Contrato -->
+             <div class="bg-gray-50 p-2 border-t border-gray-200 grid grid-cols-2 gap-2">
+                <button class="bg-white border border-red-200 text-red-600 font-bold py-2 rounded text-xs">Reportar Problema</button>
+                <button class="bg-green-600 text-white font-bold py-2 rounded text-xs">Concluir Trabalho</button>
+             </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Lógica simples para navegar entre as "telas"
+        function showScreen(screenId) {
+            // 1. Esconde todas as telas
+            document.querySelectorAll('.screen-content').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // 2. Mostra a tela desejada
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.add('active');
+            }
+
+            // 3. Atualiza o Header baseado no contexto
+            const header = document.getElementById('app-header');
+            const title = document.getElementById('header-title');
+
+            if (screenId.includes('client')) {
+                header.className = 'bg-blue-700 text-white p-4 shadow-md sticky top-0 z-10';
+                title.innerText = screenId === 'client-post' ? 'Nova Vaga' : 'Meus Serviços';
+            } else if (screenId === 'worker-details') {
+                header.classList.add('hidden'); // Esconde header na tela de detalhes (tem imagem)
+            } else if (screenId === 'chat-screen') {
+                header.classList.add('hidden'); // Esconde header principal no chat
+            } else {
+                header.classList.remove('hidden');
+                header.className = 'bg-orange-600 text-white p-4 shadow-md sticky top-0 z-10';
+                title.innerText = 'Mural de Vagas';
+            }
+
+            // Scroll pro topo
+            document.querySelector('.mobile-screen').scrollTop = 0;
+        }
+
+        // Inicia na Home do Cliente ou Feed do Trabalhador
+        showScreen('worker-feed');
+    </script>
+</body>
+</html>

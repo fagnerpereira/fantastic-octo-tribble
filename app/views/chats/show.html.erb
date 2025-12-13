@@ -1,0 +1,46 @@
+<%# Based on wireframe-m6 "chat-screen" %>
+<div class="w-full max-w-4xl mx-auto h-screen flex flex-col bg-gray-200"
+    data-controller="stimulus-reflex"
+    data-stimulus-reflex-stream-name="<%= current_user.id %>">
+  <%# Header %>
+  <div class="bg-gray-900 text-white p-3 shadow-md flex items-center justify-between sticky top-0 z-10">
+    <div class="flex items-center gap-3">
+      <%= link_to mural_path, class: "w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center text-white transition" do %>
+        <i class="ph-bold ph-arrow-left text-xl"></i>
+      <% end %>
+      <div class="flex flex-col">
+        <h3 class="font-bold text-white leading-none text-lg">Chat: <%= @job.title %></h3>
+        <span class="text-xs text-green-400 font-bold mt-1 flex items-center gap-1">
+          <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+          Online
+        </span>
+      </div>
+    </div>
+    <div class="bg-white/10 px-3 py-1 rounded-lg">
+      <span class="text-xs font-black text-orange-400 uppercase">Job #<%= @job.id %></span>
+    </div>
+  </div>
+
+  <%# Security Notice %>
+  <div class="bg-white px-4 py-3 text-center border-b border-gray-200 shadow-sm flex justify-center items-center gap-2 sticky top-[60px] z-10">
+    <i class="ph-fill ph-lock-key text-green-600 text-xl"></i>
+    <p class="text-xs text-gray-800 font-bold uppercase tracking-wide">R$<%= @job.price.to_i %> GARANTIDOS NA ROCHA</p>
+  </div>
+
+  <%# Messages Area %>
+  <div id="messages" class="flex-1 p-4 space-y-6 overflow-y-auto">
+    <% @messages.each do |message| %>
+      <%= render "messages/message", message: message %>
+    <% end %>
+  </div>
+
+  <%# Input Area %>
+  <div class="bg-white p-3 flex gap-2 items-center border-t border-gray-200">
+    <%= form_with(model: [@chat, @message], id: "new-message-form", "data-reflex": "submit->MessageReflex#create", "data-chat-id": @chat.id, class: "flex-1 flex gap-2 items-center") do |form| %>
+      <%= form.text_field :content, placeholder: "Escrever...", autocomplete: "off", class: "flex-1 bg-gray-100 rounded-full px-4 py-3 flex items-center border-2 border-transparent focus-within:border-gray-900 focus-within:bg-white transition" %>
+      <button type="submit" class="w-12 h-12 bg-orange-500 text-white rounded-xl shadow-lg flex items-center justify-center hover:bg-orange-600 transition transform active:scale-90">
+        <i class="ph-fill ph-paper-plane-right text-xl pl-1"></i>
+      </button>
+    <% end %>
+  </div>
+</div>

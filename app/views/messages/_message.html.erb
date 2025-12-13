@@ -1,0 +1,6 @@
+<div id="<%= dom_id(message) %>" class="flex <%= message.user == current_user ? 'justify-end' : 'justify-start' %>">
+  <div class="p-4 rounded-2xl max-w-[85%] shadow-md relative <%= message.user == current_user ? 'bg-gray-900 text-white rounded-tr-sm' : 'bg-white text-gray-800 rounded-tl-sm' %>">
+    <p class="text-sm font-medium leading-relaxed"><%= message.content %></p>
+    <span class="text-[10px] block text-right mt-2 font-bold <%= message.user == current_user ? 'text-gray-400' : 'text-gray-400' %>"><%= message.created_at.strftime("%H:%M") %></span>
+  </div>
+</div>
