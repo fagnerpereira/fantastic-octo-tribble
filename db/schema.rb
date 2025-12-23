@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_11_142012) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_23_173000) do
   create_table "chats", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "job_id", null: false
@@ -140,6 +140,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_11_142012) do
     t.string "email"
     t.string "name"
     t.string "password_digest"
+    t.string "phone"
     t.string "role"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
