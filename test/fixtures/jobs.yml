@@ -1,17 +1,33 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
-  description: MyText
-  status: MyString
-  price: 9.99
-  client: one
-  worker: one
+open_job:
+  title: Consertar vazamento na pia
+  description: Preciso de um encanador para consertar um vazamento na pia da cozinha
+  status: open
+  price: 150.00
+  client: client_one
+  worker:
 
-two:
-  title: MyString
-  description: MyText
-  status: MyString
-  price: 9.99
-  client: two
-  worker: two
+in_progress_job:
+  title: Pintura de parede
+  description: Pintar a parede da sala de estar
+  status: in_progress
+  price: 300.00
+  client: client_one
+  worker: worker_one
+
+completed_job:
+  title: Instalação de ventilador
+  description: Instalar ventilador de teto no quarto
+  status: completed
+  price: 200.00
+  client: client_two
+  worker: worker_two
+
+open_job_two:
+  title: Limpeza de calçada
+  description: Preciso limpar a calçada da frente da casa
+  status: open
+  price: 100.00
+  client: client_two
+  worker:

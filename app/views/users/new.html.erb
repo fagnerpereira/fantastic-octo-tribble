@@ -36,21 +36,25 @@
           </div>
         </fieldset>
 
+        <%# TODO: Implement custom error messages in a prettier and clean way, following the app UI template with clear and concise messages %>
         <div>
           <%= form.label :name, "Seu Nome / Apelido", class: "sr-only" %>
-          <%= form.text_field :name, placeholder: "Seu Nome / Apelido", required: true, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <%= form.text_field :name, placeholder: "Seu Nome / Apelido", required: false, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
         </div>
+        <%# TODO: Implement custom error messages in a prettier and clean way, following the app UI template with clear and concise messages %>
         <div>
           <%= form.label :email, "Email", class: "sr-only" %>
-          <%= form.email_field :email, placeholder: "seu@email.com", required: true, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <%= form.email_field :email, placeholder: "seu@email.com", required: false, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
         </div>
+        <%# TODO: Implement custom error messages in a prettier and clean way, following the app UI template with clear and concise messages %>
         <div>
           <%= form.label :password, "Senha", class: "sr-only" %>
-          <%= form.password_field :password, placeholder: "Crie uma senha", required: true, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <%= form.password_field :password, placeholder: "Crie uma senha", required: false, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
         </div>
+        <%# TODO: Implement custom error messages in a prettier and clean way, following the app UI template with clear and concise messages %>
         <div>
           <%= form.label :password_confirmation, "Confirme a Senha", class: "sr-only" %>
-          <%= form.password_field :password_confirmation, placeholder: "Confirme a senha", required: true, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <%= form.password_field :password_confirmation, placeholder: "Confirme a senha", required: false, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
         </div>
       </div>
 

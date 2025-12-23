@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   has_secure_password
 
-  enum role: { client: "client", worker: "worker" }
+  enum :role, { client: "client", worker: "worker" }
 
   has_many :posted_jobs, class_name: "Job", foreign_key: "client_id"
   has_many :accepted_jobs, class_name: "Job", foreign_key: "worker_id"

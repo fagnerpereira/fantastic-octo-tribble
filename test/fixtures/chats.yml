@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  job: one
+chat_one:
+  job: in_progress_job
 
-two:
-  job: two
+chat_two:
+  job: completed_job

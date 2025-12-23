@@ -11,5 +11,21 @@ module ActiveSupport
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
+    def log_in_as(user)
+      post login_path, params: {
+        email: user.email,
+        password: "password123"
+      }
+      follow_redirect! if response.redirect?
+    end
+  end
+end
+
+class ActionDispatch::IntegrationTest
+  def log_in_as(user)
+    post login_path, params: {
+      email: user.email,
+      password: "password123"
+    }
   end
 end

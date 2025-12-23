@@ -1,18 +1,75 @@
 require "test_helper"
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
-  test "should get new" do
-    get sessions_new_url
+  test "should get login page" do
+    get login_path
     assert_response :success
   end
 
-  test "should get create" do
-    get sessions_create_url
-    assert_response :success
+  test "should login with valid credentials" do
+    post login_path, params: {
+      email: users(:worker_one).email,
+      password: "password123"
+    }
+    assert_redirected_to root_path
+    assert_equal "Logged in successfully", flash[:notice]
+    assert_equal users(:worker_one).id, session[:user_id]
   end
 
-  test "should get destroy" do
-    get sessions_destroy_url
-    assert_response :success
+  test "should not login with invalid email" do
+    post login_path, params: {
+      email: "invalid@example.com",
+      password: "password123"
+    }
+    assert_response :unauthorized
+    assert_equal "Invalid email or password", flash[:alert]
+    assert_nil session[:user_id]
+  end
+
+  test "should not login with invalid password" do
+    post login_path, params: {
+      email: users(:worker_one).email,
+      password: "wrongpassword"
+    }
+    assert_response :unauthorized
+    assert_equal "Invalid email or password", flash[:alert]
+    assert_nil session[:user_id]
+  end
+
+  test "should not login without email" do
+    post login_path, params: {
+      password: "password123"
+    }
+    assert_response :unauthorized
+    assert_nil session[:user_id]
+  end
+
+  test "should not login without password" do
+    post login_path, params: {
+      email: users(:worker_one).email
+    }
+    assert_response :unauthorized
+    assert_nil session[:user_id]
+  end
+
+  test "should logout" do
+    # First login
+    post login_path, params: {
+      email: users(:worker_one).email,
+      password: "password123"
+    }
+    assert_not_nil session[:user_id]
+
+    # Then logout
+    delete logout_path
+    assert_redirected_to root_path
+    assert_equal "Logged out", flash[:notice]
+    assert_nil session[:user_id]
+  end
+
+  test "should logout when not logged in" do
+    delete logout_path
+    assert_redirected_to root_path
+    assert_nil session[:user_id]
   end
 end

@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_action :authenticate_user, only: [:new, :create]
+  skip_before_action :authenticate_user, only: [ :new, :create, :destroy ]
 
   def new
     # Renders app/views/sessions/new.html.erb
