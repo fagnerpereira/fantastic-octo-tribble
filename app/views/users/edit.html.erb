@@ -1,0 +1,50 @@
+<div class="w-full max-w-2xl mx-auto p-4 md:p-8">
+  <div class="mb-6">
+    <%= link_to user_path(@user), class: "text-gray-500 font-bold text-sm mb-2 flex items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-fit" do %>
+      <i class="ph-bold ph-arrow-left"></i>
+      <span>Voltar</span>
+    <% end %>
+    <h2 class="text-3xl font-black text-gray-900 mt-2 uppercase">Editar Perfil</h2>
+  </div>
+
+  <div class="bg-white p-8 rounded-2xl shadow-sm border-2 border-gray-100">
+    <%= form_with(model: @user, class: "space-y-6") do |form| %>
+      <div>
+        <%= form.label :name, "Nome Completo", class: "block text-gray-700 font-bold mb-2 text-xs uppercase tracking-wide" %>
+        <%= form.text_field :name, class: "w-full p-4 border-2 border-gray-200 rounded-xl text-lg focus:border-gray-900 focus:outline-none font-bold placeholder-gray-300" %>
+      </div>
+
+      <div>
+        <%= form.label :email, "Email", class: "block text-gray-700 font-bold mb-2 text-xs uppercase tracking-wide" %>
+        <%= form.email_field :email, class: "w-full p-4 border-2 border-gray-200 rounded-xl text-base focus:border-gray-900 focus:outline-none font-medium placeholder-gray-300" %>
+      </div>
+
+      <div>
+        <%= form.label :phone, "Telefone (Opcional)", class: "block text-gray-700 font-bold mb-2 text-xs uppercase tracking-wide" %>
+        <%= form.telephone_field :phone, placeholder: "(11) 98765-4321", class: "w-full p-4 border-2 border-gray-200 rounded-xl text-base focus:border-gray-900 focus:outline-none font-medium placeholder-gray-300" %>
+      </div>
+
+      <div class="border-t-2 border-gray-100 pt-6">
+        <h3 class="text-lg font-black text-gray-900 mb-4 uppercase">Alterar Senha</h3>
+        <p class="text-sm text-gray-500 font-medium mb-4">Deixe em branco para manter a senha atual</p>
+
+        <div class="space-y-4">
+          <div>
+            <%= form.label :password, "Nova Senha", class: "block text-gray-700 font-bold mb-2 text-xs uppercase tracking-wide" %>
+            <%= form.password_field :password, autocomplete: "new-password", placeholder: "••••••••", class: "w-full p-4 border-2 border-gray-200 rounded-xl text-base focus:border-gray-900 focus:outline-none font-medium placeholder-gray-300" %>
+          </div>
+
+          <div>
+            <%= form.label :password_confirmation, "Confirmar Nova Senha", class: "block text-gray-700 font-bold mb-2 text-xs uppercase tracking-wide" %>
+            <%= form.password_field :password_confirmation, autocomplete: "new-password", placeholder: "••••••••", class: "w-full p-4 border-2 border-gray-200 rounded-xl text-base focus:border-gray-900 focus:outline-none font-medium placeholder-gray-300" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex gap-3">
+        <%= form.submit "Salvar Alterações", class: "flex-1 bg-gray-900 text-white font-bold text-lg py-4 rounded-xl shadow-lg hover:bg-black transition transform active:scale-95 uppercase tracking-wide cursor-pointer" %>
+        <%= link_to "Cancelar", user_path(@user), class: "px-8 bg-gray-100 text-gray-700 font-bold text-lg py-4 rounded-xl hover:bg-gray-200 transition text-center" %>
+      </div>
+    <% end %>
+  </div>
+</div>

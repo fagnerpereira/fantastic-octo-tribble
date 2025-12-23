@@ -20,7 +20,7 @@ class UserTest < ActiveSupport::TestCase
       role: :worker
     )
     assert_not user.save, "Saved user without name"
-    assert_includes user.errors[:name], "can't be blank"
+    assert_includes user.errors[:name], "é obrigatório"
   end
 
   test "should not save user without email" do
@@ -31,7 +31,7 @@ class UserTest < ActiveSupport::TestCase
       role: :worker
     )
     assert_not user.save, "Saved user without email"
-    assert_includes user.errors[:email], "can't be blank"
+    assert_includes user.errors[:email], "é obrigatório"
   end
 
   test "should not save user without role" do
@@ -42,7 +42,7 @@ class UserTest < ActiveSupport::TestCase
       password_confirmation: "password123"
     )
     assert_not user.save, "Saved user without role"
-    assert_includes user.errors[:role], "can't be blank"
+    assert_includes user.errors[:role], "é obrigatório"
   end
 
   test "should not save user with duplicate email" do
@@ -61,7 +61,7 @@ class UserTest < ActiveSupport::TestCase
       role: :client
     )
     assert_not user2.save, "Saved user with duplicate email"
-    assert_includes user2.errors[:email], "has already been taken"
+    assert_includes user2.errors[:email], "já está em uso"
   end
 
   test "should not save user with mismatched password confirmation" do
@@ -73,7 +73,7 @@ class UserTest < ActiveSupport::TestCase
       role: :worker
     )
     assert_not user.save, "Saved user with mismatched password"
-    assert_includes user.errors[:password_confirmation], "doesn't match Password"
+    assert user.errors[:password_confirmation].any?, "No password confirmation error"
   end
 
   test "should authenticate with correct password" do

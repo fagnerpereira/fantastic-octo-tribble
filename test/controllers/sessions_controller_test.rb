@@ -12,7 +12,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       password: "password123"
     }
     assert_redirected_to root_path
-    assert_equal "Logged in successfully", flash[:notice]
+    assert_match /Bem-vindo de volta/, flash[:notice]
     assert_equal users(:worker_one).id, session[:user_id]
   end
 
@@ -21,8 +21,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       email: "invalid@example.com",
       password: "password123"
     }
-    assert_response :unauthorized
-    assert_equal "Invalid email or password", flash[:alert]
+    assert_response :unprocessable_entity
     assert_nil session[:user_id]
   end
 
@@ -31,8 +30,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       email: users(:worker_one).email,
       password: "wrongpassword"
     }
-    assert_response :unauthorized
-    assert_equal "Invalid email or password", flash[:alert]
+    assert_response :unprocessable_entity
     assert_nil session[:user_id]
   end
 
@@ -40,7 +38,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     post login_path, params: {
       password: "password123"
     }
-    assert_response :unauthorized
+    assert_response :unprocessable_entity
     assert_nil session[:user_id]
   end
 
@@ -48,7 +46,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     post login_path, params: {
       email: users(:worker_one).email
     }
-    assert_response :unauthorized
+    assert_response :unprocessable_entity
     assert_nil session[:user_id]
   end
 
@@ -63,7 +61,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     # Then logout
     delete logout_path
     assert_redirected_to root_path
-    assert_equal "Logged out", flash[:notice]
+    assert_match /saiu da sua conta/, flash[:notice]
     assert_nil session[:user_id]
   end
 

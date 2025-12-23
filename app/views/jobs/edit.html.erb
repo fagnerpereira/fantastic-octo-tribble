@@ -4,7 +4,7 @@
       <i class="ph-bold ph-arrow-left"></i>
       <span>Voltar</span>
     <% end %>
-    <h2 class="text-3xl font-black text-gray-900 mt-2 uppercase">Novo Serviço</h2>
+    <h2 class="text-3xl font-black text-gray-900 mt-2 uppercase">Editar Serviço</h2>
   </div>
 
   <%# Validation Errors %>
@@ -29,7 +29,6 @@
     </div>
   <% end %>
 
-  <%# New Job Form based on wireframe-m6 "client-post" %>
   <%= form_with(model: @job, class: "space-y-6") do |form| %>
     <div>
       <%= form.label :title, "O que precisa?", class: "block text-gray-700 font-bold mb-2 text-xs uppercase tracking-wide" %>
@@ -44,7 +43,7 @@
 
     <div>
       <%= form.label :description, "Detalhes", class: "block text-gray-700 font-bold mb-2 text-xs uppercase tracking-wide" %>
-      <%= form.text_area :description, rows: 3, placeholder: "Tamanho, problemas, material...", class: "w-full p-4 border-2 #{@job.errors[:description].any? ? 'border-red-300 bg-red-50' : 'border-gray-200'} rounded-xl text-base focus:border-gray-900 focus:outline-none font-medium placeholder-gray-300" %>
+      <%= form.text_area :description, rows: 4, placeholder: "Tamanho, problemas, material...", class: "w-full p-4 border-2 #{@job.errors[:description].any? ? 'border-red-300 bg-red-50' : 'border-gray-200'} rounded-xl text-base focus:border-gray-900 focus:outline-none font-medium placeholder-gray-300" %>
       <% if @job.errors[:description].any? %>
         <p class="text-red-600 text-sm font-bold mt-2 flex items-center gap-1">
           <i class="ph-fill ph-warning"></i>
@@ -71,8 +70,21 @@
       </p>
     </div>
 
-    <div class="pt-2">
-      <%= form.submit "Lançar na Rocha", class: "w-full bg-gray-900 text-white font-bold text-xl py-4 rounded-xl shadow-lg hover:bg-black transition transform active:scale-95 uppercase tracking-wide cursor-pointer" %>
+    <% if @job.worker.present? %>
+      <div class="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-5">
+        <div class="flex items-start gap-3">
+          <i class="ph-fill ph-info text-2xl text-yellow-600"></i>
+          <div>
+            <p class="font-bold text-yellow-900 text-sm uppercase mb-1">Serviço em Andamento</p>
+            <p class="text-yellow-800 text-sm font-medium">Este serviço já foi aceito por um profissional. Edite com cuidado.</p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="pt-2 flex gap-3">
+      <%= form.submit "Salvar Alterações", class: "flex-1 bg-gray-900 text-white font-bold text-xl py-4 rounded-xl shadow-lg hover:bg-black transition transform active:scale-95 uppercase tracking-wide cursor-pointer" %>
+      <%= link_to "Cancelar", dashboard_path, class: "px-8 bg-gray-100 text-gray-700 font-bold text-lg py-4 rounded-xl hover:bg-gray-200 transition text-center" %>
     </div>
   <% end %>
 </div>

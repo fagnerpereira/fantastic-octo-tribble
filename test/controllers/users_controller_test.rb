@@ -20,7 +20,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       }
     end
     assert_redirected_to root_path
-    assert_equal "Account created successfully!", flash[:notice]
+    assert_match /Conta criada com sucesso/, flash[:notice]
     assert_not_nil session[:user_id]
   end
 

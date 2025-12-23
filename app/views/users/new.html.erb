@@ -7,12 +7,34 @@
       <p class="text-gray-400 mt-2 font-medium">Escolha seu perfil na Rocha.</p>
     </div>
 
+    <%# Validation Errors %>
+    <% if @user.errors.any? %>
+      <div class="bg-red-900/50 border-2 border-red-500 rounded-xl p-5 mb-6">
+        <div class="flex items-start gap-3">
+          <i class="ph-fill ph-warning-circle text-2xl text-red-400 mt-0.5"></i>
+          <div class="flex-1">
+            <h3 class="font-black text-red-200 mb-2 uppercase text-sm">
+              <%= pluralize(@user.errors.count, "erro encontrado", "erros encontrados") %>
+            </h3>
+            <ul class="space-y-1">
+              <% @user.errors.full_messages.each do |message| %>
+                <li class="text-red-200 font-medium text-sm flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
+                  <%= message %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <%= form_with(model: @user, url: sign_up_path, class: "space-y-4") do |form| %>
       <div class="space-y-5">
         <fieldset class="grid grid-cols-2 gap-4">
           <div>
             <%= form.radio_button :role, "worker", class: "sr-only peer" %>
-            <%= form.label :role_worker, class: "w-full bg-gray-800 border-2 border-gray-700 p-6 rounded-xl text-left hover:border-orange-500 transition group flex items-center gap-4 cursor-pointer peer-checked:border-orange-500 peer-checked:bg-orange-900/50" do %>
+            <%= form.label :role_worker, class: "w-full bg-gray-800 border-2 #{@user.errors[:role].any? ? 'border-red-500' : 'border-gray-700'} p-6 rounded-xl text-left hover:border-orange-500 transition group flex items-center gap-4 cursor-pointer peer-checked:border-orange-500 peer-checked:bg-orange-900/50" do %>
               <div class="w-12 h-12 bg-gray-700 border-2 border-gray-600 rounded-full flex items-center justify-center shadow-sm group-hover:border-orange-400 group-peer-checked:border-orange-500 group-peer-checked:text-orange-400">
                 <i class="ph-fill ph-wrench text-2xl text-gray-400 group-hover:text-orange-400"></i>
               </div>
@@ -24,7 +46,7 @@
           </div>
           <div>
             <%= form.radio_button :role, "client", class: "sr-only peer" %>
-            <%= form.label :role_client, class: "w-full bg-gray-800 border-2 border-gray-700 p-6 rounded-xl text-left hover:border-blue-500 transition group flex items-center gap-4 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-900/50" do %>
+            <%= form.label :role_client, class: "w-full bg-gray-800 border-2 #{@user.errors[:role].any? ? 'border-red-500' : 'border-gray-700'} p-6 rounded-xl text-left hover:border-blue-500 transition group flex items-center gap-4 cursor-pointer peer-checked:border-blue-500 peer-checked:bg-blue-900/50" do %>
               <div class="w-12 h-12 bg-gray-700 border-2 border-gray-600 rounded-full flex items-center justify-center shadow-sm group-hover:border-blue-400 group-peer-checked:border-blue-500 group-peer-checked:text-blue-400">
                 <i class="ph-fill ph-house text-2xl text-gray-400 group-hover:text-blue-400"></i>
               </div>
@@ -36,25 +58,48 @@
           </div>
         </fieldset>
 
-        <%# TODO: Implement custom error messages in a prettier and clean way, following the app UI template with clear and concise messages %>
         <div>
           <%= form.label :name, "Seu Nome / Apelido", class: "sr-only" %>
-          <%= form.text_field :name, placeholder: "Seu Nome / Apelido", required: false, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <%= form.text_field :name, placeholder: "Seu Nome / Apelido", required: false, class: "w-full bg-gray-800 border-2 #{@user.errors[:name].any? ? 'border-red-500 bg-red-900/30' : 'border-gray-700'} text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <% if @user.errors[:name].any? %>
+            <p class="text-red-400 text-sm font-bold mt-2 flex items-center gap-1">
+              <i class="ph-fill ph-warning"></i>
+              <%= @user.errors[:name].first %>
+            </p>
+          <% end %>
         </div>
-        <%# TODO: Implement custom error messages in a prettier and clean way, following the app UI template with clear and concise messages %>
+
         <div>
           <%= form.label :email, "Email", class: "sr-only" %>
-          <%= form.email_field :email, placeholder: "seu@email.com", required: false, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <%= form.email_field :email, placeholder: "seu@email.com", required: false, class: "w-full bg-gray-800 border-2 #{@user.errors[:email].any? ? 'border-red-500 bg-red-900/30' : 'border-gray-700'} text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <% if @user.errors[:email].any? %>
+            <p class="text-red-400 text-sm font-bold mt-2 flex items-center gap-1">
+              <i class="ph-fill ph-warning"></i>
+              <%= @user.errors[:email].first %>
+            </p>
+          <% end %>
         </div>
-        <%# TODO: Implement custom error messages in a prettier and clean way, following the app UI template with clear and concise messages %>
+
         <div>
           <%= form.label :password, "Senha", class: "sr-only" %>
-          <%= form.password_field :password, placeholder: "Crie uma senha", required: false, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <%= form.password_field :password, placeholder: "Crie uma senha", required: false, class: "w-full bg-gray-800 border-2 #{@user.errors[:password].any? ? 'border-red-500 bg-red-900/30' : 'border-gray-700'} text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <% if @user.errors[:password].any? %>
+            <p class="text-red-400 text-sm font-bold mt-2 flex items-center gap-1">
+              <i class="ph-fill ph-warning"></i>
+              <%= @user.errors[:password].first %>
+            </p>
+          <% end %>
         </div>
-        <%# TODO: Implement custom error messages in a prettier and clean way, following the app UI template with clear and concise messages %>
+
         <div>
           <%= form.label :password_confirmation, "Confirme a Senha", class: "sr-only" %>
-          <%= form.password_field :password_confirmation, placeholder: "Confirme a senha", required: false, class: "w-full bg-gray-800 border-2 border-gray-700 text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <%= form.password_field :password_confirmation, placeholder: "Confirme a senha", required: false, class: "w-full bg-gray-800 border-2 #{@user.errors[:password_confirmation].any? ? 'border-red-500 bg-red-900/30' : 'border-gray-700'} text-white font-bold py-4 px-4 rounded-xl focus:ring-orange-500 focus:border-orange-500" %>
+          <% if @user.errors[:password_confirmation].any? %>
+            <p class="text-red-400 text-sm font-bold mt-2 flex items-center gap-1">
+              <i class="ph-fill ph-warning"></i>
+              <%= @user.errors[:password_confirmation].first %>
+            </p>
+          <% end %>
         </div>
       </div>
 

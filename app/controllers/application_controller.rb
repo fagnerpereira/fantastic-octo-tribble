@@ -9,7 +9,12 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
+    if Rails.env.development?
+      # DEV MODE: Auto-login as first user if not logged in
+      @current_user ||= User.find_by(id: session[:user_id]) || User.first
+    else
+      @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
+    end
   end
   helper_method :current_user
 
@@ -19,6 +24,7 @@ class ApplicationController < ActionController::Base
   helper_method :user_logged_in?
 
   def authenticate_user
+    return if Rails.env.development?
     redirect_to login_path, alert: "You must be logged in to access this page." unless user_logged_in?
   end
 end

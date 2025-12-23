@@ -10,11 +10,12 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
 
-  resources :jobs, only: [:index, :new, :create, :show]
-  resources :chats, only: [:show]
-  get "mural", to: "jobs#index"
+  resources :users, only: [ :show, :edit, :update ]
+  resources :jobs, only: [ :index, :new, :create, :show, :edit, :update, :destroy ]
+  resources :chats, only: [ :show ]
 
-  get "dashboard", to: "clients#show"
+  get "mural", to: "jobs#index"
+  get "dashboard", to: "clients#dashboard"
 
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check

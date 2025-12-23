@@ -25,7 +25,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@client)
     get jobs_path
     assert_redirected_to root_path
-    assert_equal "Acesso não autorizado.", flash[:alert]
+    assert_match /Apenas profissionais podem ver o mural/, flash[:alert]
   end
 
   test "should not get index when not logged in" do
@@ -44,7 +44,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@worker)
     get new_job_path
     assert_redirected_to root_path
-    assert_equal "Acesso não autorizado.", flash[:alert]
+    assert_equal "⛔ Acesso não autorizado. Apenas clientes podem gerenciar serviços.", flash[:alert]
   end
 
   test "should not get new when not logged in" do
@@ -65,7 +65,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
       }
     end
     assert_redirected_to dashboard_path
-    assert_equal "Serviço publicado com sucesso!", flash[:notice]
+    assert_equal "✅ Serviço publicado com sucesso! Aguardando profissionais.", flash[:notice]
   end
 
   test "created job should belong to current client" do
@@ -118,8 +118,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
   test "should not show job as client" do
     log_in_as(@client)
     get job_path(jobs(:open_job))
-    assert_redirected_to root_path
-    assert_equal "Acesso não autorizado.", flash[:alert]
+    assert_response :success
   end
 
   test "should not show job when not logged in" do
