@@ -1,0 +1,78 @@
+<div class="w-full max-w-2xl mx-auto p-4 md:p-8">
+  <div class="mb-4">
+    <%= link_to dashboard_path, class: "text-gray-500 font-bold text-sm mb-2 flex items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-fit" do %>
+      <i class="ph-bold ph-arrow-left"></i>
+      <span>Voltar</span>
+    <% end %>
+    <h2 class="text-3xl font-black text-gray-900 mt-2 uppercase">Novo Serviço</h2>
+  </div>
+
+  <%# Validation Errors %>
+  <% if @job.errors.any? %>
+    <div class="bg-red-50 border-2 border-red-200 rounded-xl p-5 mb-6">
+      <div class="flex items-start gap-3">
+        <i class="ph-fill ph-warning-circle text-2xl text-red-600 mt-0.5"></i>
+        <div class="flex-1">
+          <h3 class="font-black text-red-900 mb-2 uppercase text-sm">
+            <%= pluralize(@job.errors.count, "erro encontrado", "erros encontrados") %>
+          </h3>
+          <ul class="space-y-1">
+            <% @job.errors.full_messages.each do |message| %>
+              <li class="text-red-800 font-medium text-sm flex items-center gap-2">
+                <span class="w-1.5 h-1.5 bg-red-600 rounded-full"></span>
+                <%= message %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <%# New Job Form based on wireframe-m6 "client-post" %>
+  <%= form_with(model: @job, class: "space-y-6") do |form| %>
+    <div>
+      <%= form.label :title, "O que precisa?", class: "block text-gray-700 font-bold mb-2 text-xs uppercase tracking-wide" %>
+      <%= form.text_field :title, placeholder: "Ex: Rebocar parede", class: "w-full p-4 border-2 #{@job.errors[:title].any? ? 'border-red-300 bg-red-50' : 'border-gray-200'} rounded-xl text-lg focus:border-gray-900 focus:outline-none font-bold placeholder-gray-300" %>
+      <% if @job.errors[:title].any? %>
+        <p class="text-red-600 text-sm font-bold mt-2 flex items-center gap-1">
+          <i class="ph-fill ph-warning"></i>
+          <%= @job.errors[:title].first %>
+        </p>
+      <% end %>
+    </div>
+
+    <div>
+      <%= form.label :description, "Detalhes", class: "block text-gray-700 font-bold mb-2 text-xs uppercase tracking-wide" %>
+      <%= form.text_area :description, rows: 3, placeholder: "Tamanho, problemas, material...", class: "w-full p-4 border-2 #{@job.errors[:description].any? ? 'border-red-300 bg-red-50' : 'border-gray-200'} rounded-xl text-base focus:border-gray-900 focus:outline-none font-medium placeholder-gray-300" %>
+      <% if @job.errors[:description].any? %>
+        <p class="text-red-600 text-sm font-bold mt-2 flex items-center gap-1">
+          <i class="ph-fill ph-warning"></i>
+          <%= @job.errors[:description].first %>
+        </p>
+      <% end %>
+    </div>
+
+    <div class="bg-gray-50 p-5 rounded-xl border-2 border-gray-100">
+      <%= form.label :price, "Pagamento (À Vista)", class: "block text-gray-900 font-black mb-2 flex justify-between items-center text-sm uppercase" %>
+      <div class="relative">
+        <span class="absolute left-4 top-4 text-gray-400 font-bold text-lg">R$</span>
+        <%= form.number_field :price, placeholder: "0,00", step: 0.01, class: "w-full pl-12 p-4 border-2 #{@job.errors[:price].any? ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-white'} rounded-xl text-2xl font-black text-gray-900 focus:border-green-500 focus:outline-none" %>
+      </div>
+      <% if @job.errors[:price].any? %>
+        <p class="text-red-600 text-sm font-bold mt-3 flex items-center gap-1">
+          <i class="ph-fill ph-warning"></i>
+          <%= @job.errors[:price].first %>
+        </p>
+      <% end %>
+      <p class="text-xs text-gray-500 mt-3 font-bold flex gap-1.5 items-center">
+        <i class="ph-fill ph-lock-key text-green-600"></i>
+        Valor retido com segurança.
+      </p>
+    </div>
+
+    <div class="pt-2">
+      <%= form.submit "Lançar na Rocha", class: "w-full bg-gray-900 text-white font-bold text-xl py-4 rounded-xl shadow-lg hover:bg-black transition transform active:scale-95 uppercase tracking-wide cursor-pointer" %>
+    </div>
+  <% end %>
+</div>

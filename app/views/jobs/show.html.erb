@@ -1,0 +1,75 @@
+<div class="max-w-4xl mx-auto">
+  <div class="bg-white relative h-full flex flex-col md:flex-row">
+    <%# Map simulation from wireframe %>
+    <div class="md:w-1/3 h-64 md:h-auto bg-gray-300 relative w-full">
+      <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-20 h-20 bg-orange-500/30 rounded-full flex items-center justify-center animate-pulse">
+          <div class="w-5 h-5 bg-orange-600 rounded-full border-4 border-white shadow-lg"></div>
+        </div>
+      </div>
+      <%= link_to mural_path, class: "absolute top-4 left-4 bg-white p-3 rounded-xl shadow-md text-gray-900 hover:bg-gray-50 transition z-20 border border-gray-100" do %>
+        <i class="ph-bold ph-arrow-left text-xl"></i>
+      <% end %>
+    </div>
+
+    <%# Job Details %>
+    <div class="md:w-2/3 p-6 -mt-10 md:mt-0 bg-white rounded-t-3xl md:rounded-none relative z-10 flex-1 flex flex-col">
+      <div class="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6 md:hidden"></div>
+
+      <%# Header %>
+      <div class="flex justify-between items-start mb-6">
+        <div class="flex-1 pr-4">
+          <h2 class="text-3xl font-black text-gray-900 leading-none mb-2 uppercase"><%= @job.title %></h2>
+          <div class="flex items-center gap-2 text-gray-500 text-sm font-bold">
+            <i class="ph-fill ph-map-pin"></i>
+            <span>Vila Oliveira</span> <%# Placeholder %>
+          </div>
+        </div>
+        <div class="text-right bg-green-50 px-3 py-2 rounded-xl border border-green-100">
+          <p class="text-3xl font-black text-green-600 tracking-tighter">R$<%= @job.price.to_i %></p>
+          <p class="text-[10px] font-black text-green-800 uppercase">Liberado</p>
+        </div>
+      </div>
+
+      <%# Summary Cards %>
+      <div class="grid grid-cols-3 gap-3 mb-8">
+        <div class="bg-gray-50 p-3 rounded-xl text-center border-2 border-gray-100">
+          <i class="ph-fill ph-ruler text-2xl text-gray-800 mb-1"></i>
+          <p class="text-xs font-black text-gray-600 uppercase">15m²</p> <%# Placeholder %>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-xl text-center border-2 border-gray-100">
+          <i class="ph-fill ph-package text-2xl text-gray-800 mb-1"></i>
+          <p class="text-xs font-black text-gray-600 uppercase">Material OK</p> <%# Placeholder %>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-xl text-center border-2 border-gray-100">
+          <i class="ph-fill ph-calendar text-2xl text-gray-800 mb-1"></i>
+          <p class="text-xs font-black text-gray-600 uppercase">Amanhã</p> <%# Placeholder %>
+        </div>
+      </div>
+
+      <%# Description %>
+      <div class="mb-8 bg-orange-50 p-5 rounded-xl border-l-4 border-orange-500">
+        <h3 class="font-black text-orange-900 mb-2 text-xs uppercase tracking-wide">O que é pra fazer?</h3>
+        <p class="text-gray-800 text-base font-medium leading-relaxed"><%= @job.description %></p>
+      </div>
+
+      <%# Action Area %>
+      <div class="mt-auto pt-2">
+        <button
+          data-reflex="click->JobReflex#accept"
+          data-job-id="<%= @job.id %>"
+          class="w-full bg-gray-900 text-white font-black text-xl py-5 rounded-2xl shadow-xl hover:bg-black transition transform active:scale-95 flex items-center justify-center gap-3 group border-2 border-gray-900">
+          <div class="bg-orange-500 w-8 h-8 rounded-lg flex items-center justify-center group-hover:bg-white group-hover:text-orange-500 transition">
+            <i class="ph-bold ph-check text-xl font-bold"></i>
+          </div>
+          PEGAR SERVIÇO
+        </button>
+        <p class="text-center text-xs text-gray-400 mt-4 font-bold uppercase tracking-wide flex items-center justify-center gap-1">
+          <i class="ph-fill ph-shield-check"></i>
+          Vaga garantida na hora
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

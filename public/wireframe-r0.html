@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROCHA - Web Acessível</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0F172A',  /* Azul Petróleo */
+                            primary: '#EA580C', /* Laranja Ação */
+                            light: '#F8FAFC',
+                            success: '#16A34A',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F8FAFC; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="text-slate-900 h-screen flex flex-col overflow-hidden">
+
+    <!-- NAV BAR ACESSÍVEL -->
+    <nav class="bg-brand-dark text-white h-20 flex items-center justify-between px-6 shadow-xl z-50 shrink-0">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="showPage('landing')">
+            <div class="bg-white/10 p-2 rounded-xl border border-white/10">
+                <i class="ph-fill ph-hexagon text-4xl text-brand-primary"></i>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-2xl font-black tracking-wider uppercase leading-none">ROCHA</span>
+                <span class="text-[10px] text-slate-400 font-bold tracking-widest uppercase mt-1">TRABALHO SÉRIO</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <!-- Botão de Ajuda Visual -->
+            <button class="hidden md:flex bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded-full font-bold text-xs items-center gap-2 transition border border-green-400">
+                <i class="ph-fill ph-whatsapp-logo text-xl"></i> AJUDA
+            </button>
+            <button onclick="showPage('worker-feed')" class="bg-brand-primary hover:bg-orange-500 text-white px-6 py-3 rounded-xl text-sm font-black uppercase tracking-wide flex items-center gap-2">
+                <i class="ph-bold ph-user"></i> Entrar
+            </button>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 overflow-y-auto bg-brand-light relative" id="main-container">
+
+        <!-- LANDING -->
+        <div id="page-landing" class="min-h-full flex flex-col fade-in">
+            <section class="bg-brand-dark text-white py-20 px-6 text-center flex-1 flex flex-col justify-center relative overflow-hidden">
+                <div class="absolute inset-0 opacity-5 pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23fff\' fill-opacity=\'1\'%3E%3Cpath d=\'M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+                <div class="max-w-4xl mx-auto relative z-10">
+                    <h1 class="text-5xl md:text-7xl font-black mb-8 tracking-tight leading-none uppercase">
+                        Trabalho <span class="text-brand-primary">Firme.</span><br>
+                        Dinheiro <span class="text-brand-success">Certo.</span>
+                    </h1>
+
+                    <div class="flex flex-col md:flex-row gap-6 justify-center mt-12">
+                        <button onclick="showPage('worker-feed')" class="bg-brand-primary text-white px-8 py-8 rounded-3xl text-xl font-black hover:bg-orange-600 transition shadow-2xl border-b-8 border-orange-800 hover:translate-y-1 flex flex-col items-center gap-4 min-w-[280px]">
+                            <div class="bg-white/20 p-4 rounded-full"><i class="ph-fill ph-hard-hat text-5xl"></i></div>
+                            <span>SOU MESTRE</span>
+                        </button>
+                        <button onclick="alert('Área do cliente...')" class="bg-white text-brand-dark px-8 py-8 rounded-3xl text-xl font-black hover:bg-slate-100 transition shadow-2xl border-b-8 border-slate-300 hover:translate-y-1 flex flex-col items-center gap-4 min-w-[280px]">
+                            <div class="bg-brand-dark/10 p-4 rounded-full"><i class="ph-fill ph-house text-5xl text-brand-dark"></i></div>
+                            <span>SOU CLIENTE</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- FEED DO TRABALHADOR (MURAL) -->
+        <div id="page-worker-feed" class="hidden min-h-full fade-in p-4 md:p-8">
+            <div class="max-w-6xl mx-auto">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-orange-100 p-3 rounded-full text-brand-primary"><i class="ph-fill ph-sun text-3xl"></i></div>
+                        <div>
+                            <p class="text-slate-500 font-bold text-sm uppercase">Bom dia</p>
+                            <h2 class="text-3xl font-black text-brand-dark">Mestre Zé</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card de Vaga Acessível -->
+                    <div class="bg-white rounded-3xl border-2 border-slate-100 shadow-sm hover:shadow-xl hover:border-brand-primary transition cursor-pointer overflow-hidden group" onclick="alert('Detalhes da vaga...')">
+                        <div class="h-3 bg-brand-primary w-full"></div>
+                        <div class="p-6">
+                            <div class="flex justify-between mb-4">
+                                <div class="bg-brand-dark text-white px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wide">Pedreiro</div>
+                                <span class="text-xs font-bold text-slate-400">Agora</span>
+                            </div>
+                            <h3 class="text-2xl font-black text-slate-900 mb-2 leading-tight">Rebocar Parede</h3>
+
+                            <!-- Botão Ouvir -->
+                            <button onclick="event.stopPropagation(); alert('Tocando áudio...')" class="w-full bg-slate-50 hover:bg-slate-100 text-brand-dark py-3 rounded-xl font-bold flex items-center justify-center gap-2 mb-4 border border-slate-200 transition">
+                                <i class="ph-fill ph-speaker-high text-xl text-brand-primary"></i> OUVIR
+                            </button>
+                        </div>
+                        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-black uppercase">PAGA</p>
+                                <p class="text-3xl font-black text-brand-success">R$ 450</p>
+                            </div>
+                            <div class="bg-white border-2 border-slate-200 w-12 h-12 rounded-full flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition">
+                                <i class="ph-bold ph-arrow-right text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        function showPage(pageId) {
+            document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) target.classList.remove('hidden');
+        }
+        showPage('landing');
+    </script>
+</body>
+</html>

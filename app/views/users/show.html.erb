@@ -1,0 +1,122 @@
+<div class="w-full max-w-4xl mx-auto p-4 md:p-8">
+  <%# Header %>
+  <div class="mb-8">
+    <%= link_to :back, class: "text-gray-500 font-bold text-sm mb-4 flex items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-fit" do %>
+      <i class="ph-bold ph-arrow-left"></i>
+      <span>Voltar</span>
+    <% end %>
+  </div>
+
+  <%# Profile Card %>
+  <div class="bg-white rounded-2xl shadow-lg border-2 border-gray-100 overflow-hidden">
+    <%# Header Background %>
+    <div class="h-32 bg-gradient-to-r from-orange-500 to-orange-600 relative">
+      <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width=\'40\' height=\'40\' viewBox=\'0 0 40 40\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23fff\' fill-opacity=\'1\'%3E%3Cpath d=\'M0 0h40v40H0V0zm20 20h20v20H20V20zM0 20h20v20H0V20z\'/%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
+
+    <%# Profile Info %>
+    <div class="p-8 -mt-16 relative">
+      <div class="flex flex-col md:flex-row gap-6 items-start md:items-end mb-8">
+        <%# Avatar %>
+        <div class="w-32 h-32 bg-white border-4 border-white rounded-2xl shadow-xl flex items-center justify-center relative z-10">
+          <i class="ph-fill ph-<%= @user.worker? ? 'hard-hat' : 'house' %> text-6xl text-gray-700"></i>
+        </div>
+
+        <%# Name and Role %>
+        <div class="flex-1">
+          <h1 class="text-4xl font-black text-gray-900 mb-2 uppercase"><%= @user.name %></h1>
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-black uppercase tracking-wider <%= @user.worker? ? 'bg-orange-100 text-orange-800 border-orange-200' : 'bg-blue-100 text-blue-800 border-blue-200' %> px-3 py-1.5 rounded-full border-2">
+              <%= @user.worker? ? '🔨 Profissional' : '🏠 Cliente' %>
+            </span>
+            <span class="text-gray-500 font-medium">Desde <%= @user.created_at.strftime('%B %Y') %></span>
+          </div>
+        </div>
+
+        <% if @user == current_user %>
+          <%= link_to edit_user_path(@user), class: "bg-gray-100 text-gray-900 px-5 py-3 rounded-xl font-bold hover:bg-gray-200 transition flex items-center gap-2 border-2 border-gray-200" do %>
+            <i class="ph-bold ph-pencil-simple"></i>
+            <span>Editar</span>
+          <% end %>
+        <% end %>
+      </div>
+
+      <%# Contact Info %>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <div class="bg-gray-50 p-5 rounded-xl border-2 border-gray-100">
+          <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-2">
+            <i class="ph-fill ph-envelope"></i>
+            Email
+          </p>
+          <p class="font-black text-gray-900 text-lg"><%= @user.email %></p>
+        </div>
+
+        <% if @user.phone.present? %>
+          <div class="bg-gray-50 p-5 rounded-xl border-2 border-gray-100">
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-2">
+              <i class="ph-fill ph-phone"></i>
+              Telefone
+            </p>
+            <p class="font-black text-gray-900 text-lg"><%= @user.phone %></p>
+          </div>
+        <% else %>
+          <div class="bg-orange-50 p-5 rounded-xl border-2 border-orange-200">
+            <p class="text-xs font-bold text-orange-700 uppercase tracking-wide mb-2 flex items-center gap-2">
+              <i class="ph-fill ph-phone-x"></i>
+              Telefone não informado
+            </p>
+            <p class="font-semibold text-orange-800 text-sm">Atualize seus dados para que clientes consigam falar com você.</p>
+          </div>
+        <% end %>
+      </div>
+
+      <%# Stats - Worker Only %>
+      <% if @user.worker? %>
+        <div class="border-t-2 border-gray-100 pt-6">
+          <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">Estatísticas</h3>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="text-center bg-gradient-to-br from-green-50 to-green-100 p-5 rounded-xl border-2 border-green-200">
+              <i class="ph-fill ph-check-circle text-3xl text-green-600 mb-2"></i>
+              <p class="text-3xl font-black text-green-900"><%= @user.accepted_jobs.where(status: :completed).count %></p>
+              <p class="text-xs font-bold text-green-800 uppercase">Concluídos</p>
+            </div>
+            <div class="text-center bg-gradient-to-br from-blue-50 to-blue-100 p-5 rounded-xl border-2 border-blue-200">
+              <i class="ph-fill ph-wrench text-3xl text-blue-600 mb-2"></i>
+              <p class="text-3xl font-black text-blue-900"><%= @user.accepted_jobs.where(status: :in_progress).count %></p>
+              <p class="text-xs font-bold text-blue-800 uppercase">Ativos</p>
+            </div>
+            <div class="text-center bg-gradient-to-br from-orange-50 to-orange-100 p-5 rounded-xl border-2 border-orange-200">
+              <i class="ph-fill ph-star text-3xl text-orange-600 mb-2"></i>
+              <p class="text-3xl font-black text-orange-900"><%= @user.accepted_jobs.count %></p>
+              <p class="text-xs font-bold text-orange-800 uppercase">Total</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Stats - Client Only %>
+      <% if @user.client? %>
+        <div class="border-t-2 border-gray-100 pt-6">
+          <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-4">Estatísticas</h3>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="text-center bg-gradient-to-br from-orange-50 to-orange-100 p-5 rounded-xl border-2 border-orange-200">
+              <i class="ph-fill ph-clock text-3xl text-orange-600 mb-2"></i>
+              <p class="text-3xl font-black text-orange-900"><%= @user.posted_jobs.where(status: :open).count %></p>
+              <p class="text-xs font-bold text-orange-800 uppercase">Abertos</p>
+            </div>
+            <div class="text-center bg-gradient-to-br from-blue-50 to-blue-100 p-5 rounded-xl border-2 border-blue-200">
+              <i class="ph-fill ph-package text-3xl text-blue-600 mb-2"></i>
+              <p class="text-3xl font-black text-blue-900"><%= @user.posted_jobs.where(status: :in_progress).count %></p>
+              <p class="text-xs font-bold text-blue-800 uppercase">Andamento</p>
+            </div>
+            <div class="text-center bg-gradient-to-br from-green-50 to-green-100 p-5 rounded-xl border-2 border-green-200">
+              <i class="ph-fill ph-check-circle text-3xl text-green-600 mb-2"></i>
+              <p class="text-3xl font-black text-green-900"><%= @user.posted_jobs.where(status: :completed).count %></p>
+              <p class="text-xs font-bold text-green-800 uppercase">Finalizados</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

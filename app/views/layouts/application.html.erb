@@ -1,31 +1,102 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Fantastic Octo Tribble" %></title>
+    <title>Rocha - Trabalho Firme</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Fantastic Octo Tribble">
-    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <%= action_cable_meta_tag %>
+    <script src="https://unpkg.com/@phosphor-icons/web" defer></script>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="bg-gray-50 min-h-screen flex flex-col font-sans">
+    <%# Navigation Bar %>
+    <nav class="bg-gray-900 text-white sticky top-0 z-50 border-b border-gray-800 shadow-lg">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <%# Logo %>
+          <div class="flex items-center gap-2">
+            <%= link_to root_path, class: "flex items-center gap-2 group" do %>
+              <div class="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center transform group-hover:rotate-12 transition">
+                <i class="ph-fill ph-bricks text-white text-xl"></i>
+              </div>
+              <span class="font-black text-xl tracking-tight uppercase">Rocha</span>
+            <% end %>
+          </div>
+
+          <%# Desktop Menu %>
+          <div class="hidden md:flex items-center gap-6">
+            <%= link_to "Mural de Vagas", mural_path, class: "text-gray-300 hover:text-white font-bold text-sm uppercase tracking-wide transition #{'text-orange-500' if current_page?(mural_path)}" %>
+
+            <% if user_logged_in? %>
+              <% if current_user.client? %>
+                <%= link_to "Minha Área", dashboard_path, class: "text-gray-300 hover:text-white font-bold text-sm uppercase tracking-wide transition #{'text-orange-500' if current_page?(dashboard_path)}" %>
+              <% end %>
+
+              <div class="flex items-center gap-3 pl-6 border-l border-gray-700">
+                <%= link_to user_path(current_user), class: "flex items-center gap-3 hover:opacity-80 transition" do %>
+                  <div class="text-right">
+                    <p class="text-xs text-gray-400 font-medium">Logado como</p>
+                    <p class="text-sm font-bold text-white leading-none"><%= current_user.name %></p>
+                  </div>
+                  <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center">
+                    <i class="ph-fill ph-<%= current_user.worker? ? 'hard-hat' : 'house' %> text-white text-lg"></i>
+                  </div>
+                <% end %>
+                <%= button_to logout_path, method: :delete, class: "text-gray-400 hover:text-red-400 transition ml-2" do %>
+                  <i class="ph-bold ph-sign-out text-xl"></i>
+                <% end %>
+              </div>
+            <% else %>
+              <%= link_to "Entrar", login_path, class: "text-white font-bold text-sm uppercase tracking-wide hover:text-orange-500 transition" %>
+              <%= link_to "Cadastrar", sign_up_path, class: "bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-bold text-sm uppercase tracking-wide transition shadow-md" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# Dev Tools Bar (Only in Development) %>
+      <% if Rails.env.development? %>
+        <div class="bg-gray-800 border-b border-gray-700 py-2 px-4">
+          <div class="max-w-7xl mx-auto flex items-center justify-between text-xs">
+            <span class="font-mono text-orange-400 font-bold uppercase">🛠️ Modo Simulação</span>
+            <div class="flex gap-3">
+              <%= button_to login_path(email: "worker@example.com", password: "password123"), class: "hover:text-white text-gray-400 flex items-center gap-1 transition" do %>
+                <i class="ph-fill ph-wrench"></i> Entrar como Trabalhador
+              <% end %>
+              <span class="text-gray-600">|</span>
+              <%= button_to login_path(email: "client@example.com", password: "password123"), class: "hover:text-white text-gray-400 flex items-center gap-1 transition" do %>
+                <i class="ph-fill ph-user"></i> Entrar como Cliente
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </nav>
+
+    <main class="flex-1 flex flex-col">
+      <%# Flash Messages %>
+      <% if notice %>
+        <div class="bg-green-500 text-white px-4 py-3 text-center font-bold shadow-sm animate-fade-in-down">
+          <%= notice %>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="bg-red-500 text-white px-4 py-3 text-center font-bold shadow-sm animate-fade-in-down">
+          <%= alert %>
+        </div>
+      <% end %>
+
       <%= yield %>
     </main>
+
+    <%# Footer %>
+    <footer class="bg-gray-900 text-gray-500 py-8 border-t border-gray-800 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 text-center">
+        <p class="text-sm font-medium">© <%= Time.current.year %> Rocha. Construindo confiança.</p>
+      </div>
+    </footer>
   </body>
 </html>

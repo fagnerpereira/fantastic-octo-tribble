@@ -1,0 +1,133 @@
+<div class="w-full max-w-7xl mx-auto p-4 md:p-8">
+  <%# Header %>
+  <div class="flex justify-between items-end mb-8">
+    <div>
+      <p class="text-gray-500 text-xs font-bold uppercase tracking-wide">Área do Cliente</p>
+      <h2 class="text-3xl font-black text-gray-900 uppercase">Meus Serviços</h2>
+    </div>
+    <%= link_to new_job_path, class: "bg-orange-600 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-orange-700 transition shadow-md border-b-4 border-orange-800 hover:border-orange-700 hover:translate-y-0.5 active:border-b-0 active:translate-y-1 flex items-center gap-2" do %>
+      <i class="ph-bold ph-plus-circle text-xl"></i>
+      <span class="uppercase">Novo Serviço</span>
+    <% end %>
+  </div>
+
+  <%# Stats Cards %>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <div class="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-2xl border-2 border-orange-200">
+      <div class="flex items-center gap-4">
+        <div class="bg-orange-500 p-3 rounded-xl">
+          <i class="ph-fill ph-clock text-3xl text-white"></i>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-orange-800 uppercase tracking-wide">Em Aberto</p>
+          <p class="text-3xl font-black text-orange-900"><%= @jobs.where(status: :open).count %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-2xl border-2 border-blue-200">
+      <div class="flex items-center gap-4">
+        <div class="bg-blue-500 p-3 rounded-xl">
+          <i class="ph-fill ph-wrench text-3xl text-white"></i>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-blue-800 uppercase tracking-wide">Em Andamento</p>
+          <p class="text-3xl font-black text-blue-900"><%= @jobs.where(status: :in_progress).count %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-2xl border-2 border-green-200">
+      <div class="flex items-center gap-4">
+        <div class="bg-green-500 p-3 rounded-xl">
+          <i class="ph-fill ph-check-circle text-3xl text-white"></i>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-green-800 uppercase tracking-wide">Concluídos</p>
+          <p class="text-3xl font-black text-green-900"><%= @jobs.where(status: :completed).count %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# Jobs List %>
+  <% if @jobs.any? %>
+    <div class="space-y-4">
+      <% @jobs.order(created_at: :desc).each do |job| %>
+        <div class="bg-white rounded-2xl shadow-sm border-2 border-gray-100 hover:border-gray-300 transition overflow-hidden">
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                  <h3 class="text-2xl font-black text-gray-900 uppercase"><%= job.title %></h3>
+                  <% case job.status %>
+                  <% when "open" %>
+                    <span class="text-[10px] font-black uppercase tracking-wider bg-orange-100 text-orange-800 px-2.5 py-1 rounded-full border-2 border-orange-200">Aberto</span>
+                  <% when "in_progress" %>
+                    <span class="text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full border-2 border-blue-200">Andamento</span>
+                  <% when "completed" %>
+                    <span class="text-[10px] font-black uppercase tracking-wider bg-green-100 text-green-800 px-2.5 py-1 rounded-full border-2 border-green-200">Concluído</span>
+                  <% end %>
+                </div>
+                <p class="text-gray-600 font-medium mb-3"><%= job.description %></p>
+                <p class="text-xs text-gray-400 font-bold">Publicado <%= time_ago_in_words(job.created_at) %> atrás</p>
+              </div>
+              <div class="text-right ml-4">
+                <p class="text-xs text-gray-400 font-black uppercase mb-1">Valor</p>
+                <p class="text-3xl font-black text-green-600">R$<%= job.price.to_i %></p>
+              </div>
+            </div>
+
+            <%# Action Buttons %>
+            <% if job.status == "open" %>
+              <div class="flex gap-2 mb-4">
+                <%= link_to edit_job_path(job), class: "flex-1 bg-gray-100 text-gray-900 px-4 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 transition flex items-center justify-center gap-2 border-2 border-gray-200" do %>
+                  <i class="ph-bold ph-pencil-simple"></i>
+                  <span>Editar</span>
+                <% end %>
+                <%= button_to job_path(job), method: :delete, data: { turbo_confirm: "Tem certeza que deseja excluir este serviço?" }, class: "flex-1 bg-red-50 text-red-700 px-4 py-3 rounded-xl font-bold text-sm hover:bg-red-100 transition flex items-center justify-center gap-2 border-2 border-red-200" do %>
+                  <i class="ph-bold ph-trash"></i>
+                  <span>Excluir</span>
+                <% end %>
+              </div>
+            <% end %>
+
+            <% if job.worker.present? %>
+              <div class="bg-gray-50 border-t-2 border-gray-100 -mx-6 -mb-6 p-4 mt-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                      <i class="ph-fill ph-user text-gray-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <p class="text-xs text-gray-500 font-bold uppercase">Profissional</p>
+                      <p class="font-black text-gray-900"><%= job.worker.name %></p>
+                    </div>
+                  </div>
+                  <%= link_to chat_path(job.chat), class: "bg-gray-900 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-black transition flex items-center gap-2" do %>
+                    <i class="ph-bold ph-chat-circle-dots"></i>
+                    <span>Chat</span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white p-12 rounded-2xl shadow-sm border-2 border-gray-100 text-center">
+      <div class="max-w-md mx-auto">
+        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i class="ph-fill ph-package text-4xl text-gray-400"></i>
+        </div>
+        <h3 class="text-2xl font-black text-gray-900 mb-3 uppercase">Nenhum serviço ainda</h3>
+        <p class="text-gray-500 font-medium mb-6">Publique seu primeiro serviço e encontre profissionais qualificados.</p>
+        <%= link_to new_job_path, class: "inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-700 transition" do %>
+          <i class="ph-bold ph-plus-circle"></i>
+          <span>Publicar Serviço</span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

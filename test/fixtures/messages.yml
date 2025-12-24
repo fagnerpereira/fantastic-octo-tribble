@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+message_one:
+  chat: chat_one
+  user: client_one
+  content: Olá, quando você pode começar?
+
+message_two:
+  chat: chat_one
+  user: worker_one
+  content: Posso começar amanhã de manhã!
+
+message_three:
+  chat: chat_two
+  user: client_two
+  content: Muito obrigado pelo ótimo trabalho!
+
+message_four:
+  chat: chat_two
+  user: worker_two
+  content: Foi um prazer ajudar!

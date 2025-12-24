@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App ROCHA - Mobile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        /* Estilos para simular a tela de celular */
+        body {
+            background-color: #f3f4f6; /* Gray 100 */
+            font-family: sans-serif;
+        }
+        .mobile-screen {
+            max-width: 400px;
+            height: 850px;
+            margin: 20px auto;
+            background-color: white;
+            border: 12px solid #1f2937; /* Gray 800 - Phone Border */
+            border-radius: 30px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        /* Esconder barra de rolagem mas permitir scroll */
+        .mobile-screen::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+        .screen-content {
+            display: none; /* Esconde todas as telas por padrão */
+            flex: 1;
+            flex-direction: column;
+        }
+        .screen-content.active {
+            display: flex; /* Mostra a tela ativa */
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Controle de Navegação do Protótipo -->
+    <div class="fixed top-4 left-4 bg-white p-4 rounded shadow-lg z-50 hidden md:block">
+        <h3 class="font-bold text-gray-800 mb-2">Navegação Rápida</h3>
+        <div class="flex flex-col space-y-2">
+            <button onclick="showScreen('landing-screen')" class="px-3 py-1 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded text-sm text-left">🏠 Início</button>
+            <button onclick="showScreen('worker-feed')" class="px-3 py-1 bg-orange-100 hover:bg-orange-200 text-orange-800 rounded text-sm text-left">👷 Área do Mestre</button>
+            <button onclick="showScreen('client-home')" class="px-3 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded text-sm text-left">👤 Área do Cliente</button>
+        </div>
+    </div>
+
+    <!-- A TELA DO CELULAR -->
+    <div class="mobile-screen">
+
+        <!-- HEADER FIXO -->
+        <header id="app-header" class="bg-gray-900 text-white p-4 shadow-md z-10 sticky top-0 transition-colors duration-300 hidden">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="ph-fill ph-hexagon text-2xl text-orange-500"></i>
+                    <h1 id="header-title" class="text-xl font-black tracking-wider uppercase">ROCHA</h1>
+                </div>
+                <div id="user-avatar" class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-sm font-bold border border-white/30">
+                    JS
+                </div>
+            </div>
+        </header>
+
+        <!-- ========================================== -->
+        <!-- TELA 0: LANDING / LOGIN -->
+        <!-- ========================================== -->
+        <div id="landing-screen" class="screen-content bg-gray-900 text-white p-6 flex flex-col justify-center h-full active relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full opacity-20 pointer-events-none" style="background-image: radial-gradient(#f97316 1px, transparent 1px); background-size: 30px 30px;"></div>
+
+            <div class="flex-1 flex flex-col justify-center items-center text-center relative z-10">
+                <div class="w-32 h-32 bg-gray-800 rounded-2xl flex items-center justify-center mb-8 shadow-2xl border-4 border-gray-700 transform -rotate-3">
+                    <i class="ph-fill ph-hexagon text-7xl text-orange-500"></i>
+                </div>
+                <h1 class="text-6xl font-black mb-2 tracking-tighter uppercase">ROCHA</h1>
+                <div class="h-1 w-20 bg-orange-500 mb-4"></div>
+                <p class="text-gray-300 text-lg font-medium max-w-xs">Trabalho firme.<br>Preço justo.<br>Sem leilão.</p>
+
+                <div class="mt-12 space-y-4 w-full">
+                    <button onclick="showScreen('register-role')" class="w-full bg-orange-600 text-white font-bold text-xl py-4 rounded-xl shadow-[0_4px_0_rgb(154,52,18)] hover:bg-orange-500 transition transform active:translate-y-1 active:shadow-none flex items-center justify-center gap-2">
+                        CRIAR CONTA
+                        <i class="ph-bold ph-arrow-right"></i>
+                    </button>
+                    <button onclick="alert('Fluxo de login simplificado.')" class="w-full bg-transparent border-2 border-gray-600 text-gray-300 font-bold text-lg py-4 rounded-xl hover:bg-gray-800 hover:border-gray-500 transition">
+                        ENTRAR NA ROCHA
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TELA 0.1: ESCOLHA DE PERFIL -->
+        <!-- ========================================== -->
+        <div id="register-role" class="screen-content bg-white p-6">
+            <div class="mb-8 pt-4">
+                <button onclick="showScreen('landing-screen')" class="text-gray-400 mb-4"><i class="ph-bold ph-arrow-left text-2xl"></i></button>
+                <h2 class="text-3xl font-black text-gray-900 uppercase">Quem é<br>você?</h2>
+            </div>
+
+            <div class="space-y-5">
+                <button onclick="startRegistration('worker')" class="w-full bg-gray-50 border-2 border-gray-200 p-6 rounded-xl text-left hover:border-orange-500 hover:bg-orange-50 transition group flex items-center gap-5">
+                    <div class="w-16 h-16 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center shadow-sm group-hover:border-orange-200">
+                        <i class="ph-fill ph-wrench text-3xl text-gray-700 group-hover:text-orange-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-gray-800 uppercase">Sou Rocha</h3>
+                        <p class="text-gray-500 text-sm font-medium">Quero pegar serviço</p>
+                    </div>
+                </button>
+
+                <button onclick="startRegistration('client')" class="w-full bg-gray-50 border-2 border-gray-200 p-6 rounded-xl text-left hover:border-blue-500 hover:bg-blue-50 transition group flex items-center gap-5">
+                     <div class="w-16 h-16 bg-white border-2 border-gray-200 rounded-full flex items-center justify-center shadow-sm group-hover:border-blue-200">
+                        <i class="ph-fill ph-house text-3xl text-gray-700 group-hover:text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-gray-800 uppercase">Sou Cliente</h3>
+                        <p class="text-gray-500 text-sm font-medium">Quero contratar</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TELA 3: MURAL (WORKER) -->
+        <!-- ========================================== -->
+        <div id="worker-feed" class="screen-content p-4 bg-gray-50 h-full">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <p class="text-gray-500 text-xs font-bold uppercase tracking-wide">Área do Profissional</p>
+                    <h2 class="text-2xl font-black text-gray-900 uppercase">Mural Rocha</h2>
+                </div>
+                <div class="bg-white px-3 py-1 rounded-lg border-2 border-gray-100 shadow-sm">
+                    <span class="text-xs font-bold text-gray-800 flex items-center gap-1"><i class="ph-fill ph-map-pin text-orange-500"></i> 2km</span>
+                </div>
+            </div>
+
+            <div class="space-y-4 pb-20">
+                <!-- CARD 1 -->
+                <div class="bg-white rounded-xl shadow-sm border-b-4 border-gray-200 hover:border-orange-500 transition cursor-pointer group" onclick="alert('Ver detalhes da vaga...')">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="text-white text-[10px] font-black uppercase tracking-wider bg-gray-900 px-2 py-1 rounded">Pedreiro</span>
+                            <span class="text-gray-400 text-xs font-bold">há 20min</span>
+                        </div>
+                        <h3 class="text-xl font-black text-gray-900 mb-1 leading-tight uppercase">Rebocar Parede</h3>
+                        <p class="text-gray-500 text-sm mb-4 line-clamp-2 font-medium">Muro de 3 metros de altura. Material no local.</p>
+
+                        <div class="border-t-2 border-gray-100 pt-4 flex justify-between items-center bg-gray-50 -mx-5 -mb-5 px-5 py-3 mt-4">
+                            <div>
+                                <p class="text-[10px] text-gray-400 font-black uppercase tracking-wide">Valor Líquido</p>
+                                <p class="text-2xl font-black text-green-600">R$ 450</p>
+                            </div>
+                            <div class="w-10 h-10 bg-white border-2 border-gray-200 rounded-lg flex items-center justify-center group-hover:bg-orange-500 group-hover:border-orange-500 group-hover:text-white transition">
+                                <i class="ph-bold ph-arrow-right text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TELA CLIENTE: DASHBOARD -->
+        <!-- ========================================== -->
+        <div id="client-home" class="screen-content p-4 bg-gray-50">
+            <div class="bg-gray-900 text-white p-6 rounded-2xl shadow-lg mb-6 relative overflow-hidden">
+                <div class="absolute right-0 top-0 w-24 h-24 bg-orange-500 rounded-full filter blur-3xl opacity-20 -mr-10 -mt-10"></div>
+                <p class="font-bold text-gray-400 text-sm uppercase tracking-wide mb-1">Área do Cliente</p>
+                <h2 class="text-2xl font-black mb-6">Precisa de uma<br>mão forte?</h2>
+                <button class="bg-orange-500 text-white w-full py-3 rounded-xl font-black shadow-md flex items-center justify-center gap-2 hover:bg-orange-600 transition uppercase text-sm tracking-wide">
+                    <i class="ph-bold ph-plus"></i> Publicar Vaga
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen-content').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(screenId);
+            if (target) target.classList.add('active');
+
+            const header = document.getElementById('app-header');
+            if (['landing-screen', 'register-role'].includes(screenId)) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+                // Lógica simples de troca de cor do header
+                if (screenId.includes('client')) {
+                    header.className = 'bg-gray-900 text-white p-4 shadow-md sticky top-0 z-10';
+                } else {
+                    header.className = 'bg-white text-gray-900 p-4 shadow-sm sticky top-0 z-10 border-b border-gray-200';
+                }
+            }
+        }
+
+        function startRegistration(role) {
+            if (role === 'worker') showScreen('worker-feed');
+            else showScreen('client-home');
+        }
+
+        showScreen('landing-screen');
+    </script>
+</body>
+</html>
