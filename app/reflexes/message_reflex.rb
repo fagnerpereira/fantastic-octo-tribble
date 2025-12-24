@@ -2,7 +2,7 @@ class MessageReflex < ApplicationReflex
   def create
     chat = Chat.find(element.dataset[:chat_id])
     message = chat.messages.new(message_params.merge(user: current_user))
-    
+
     if message.save
       cable_ready[chat].insert_adjacent_html(
         selector: "#messages",
