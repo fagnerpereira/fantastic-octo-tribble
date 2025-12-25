@@ -37,11 +37,13 @@ class UsersController < ApplicationController
 
   private
 
+  # TODO: implement a better role assignment strategy
+  # for example a user could be both client and worker
   def user_params
-    params.require(:user).permit(:name, :email, :phone, :password, :password_confirmation, :role)
+    params.expect(user: [ :name, :email, :phone, :password, :password_confirmation, :role ])
   end
 
   def user_update_params
-    params.require(:user).permit(:name, :email, :phone, :password, :password_confirmation)
+    params.expect(user: [ :name, :email, :phone, :password, :password_confirmation ])
   end
 end
