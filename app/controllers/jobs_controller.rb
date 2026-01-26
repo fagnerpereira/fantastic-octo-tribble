@@ -5,7 +5,7 @@ class JobsController < ApplicationController
   before_action :ensure_job_owner, only: [ :edit, :update, :destroy ]
 
   def index
-    @jobs = Job.where(status: :open).order(created_at: :desc)
+    @jobs = Job.all.order(created_at: :desc)
   end
 
   def new

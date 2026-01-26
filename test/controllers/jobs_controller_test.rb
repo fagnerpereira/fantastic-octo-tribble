@@ -25,7 +25,7 @@ class JobsControllerTest < ActionDispatch::IntegrationTest
     log_in_as(@client)
     get jobs_path
     assert_redirected_to root_path
-    assert_match /Apenas profissionais podem ver o mural/, flash[:alert]
+    assert_match(/Apenas profissionais podem ver o mural/, flash[:alert])
   end
 
   test "should not get index when not logged in" do

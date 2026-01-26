@@ -46,7 +46,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "should not save user with duplicate email" do
-    user1 = User.create!(
+    User.create!(
       name: "User One",
       email: "duplicate@example.com",
       password: "password123",

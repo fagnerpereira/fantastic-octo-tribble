@@ -12,8 +12,8 @@ class ApplicationController < ActionController::Base
     if Rails.env.development?
       # DEV MODE: Auto-login as first user if not logged in
       @current_user ||= User.find_by(id: session[:user_id]) || User.first
-    else
-      @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
+    elsif session[:user_id]
+      @current_user ||= User.find_by(id: session[:user_id])
     end
   end
   helper_method :current_user

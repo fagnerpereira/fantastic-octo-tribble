@@ -6,7 +6,7 @@ class PagesController < ApplicationController
       if current_user.client?
         redirect_to dashboard_path
       elsif current_user.worker?
-        redirect_to mural_path
+        redirect_to jobs_path
       end
     else
       # Renders app/views/pages/home.html.erb

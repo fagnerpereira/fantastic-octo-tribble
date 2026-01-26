@@ -28,7 +28,7 @@
 
           <%# Desktop Menu %>
           <div class="hidden md:flex items-center gap-6">
-            <%= link_to "Mural de Vagas", mural_path, class: "text-gray-300 hover:text-white font-bold text-sm uppercase tracking-wide transition #{'text-orange-500' if current_page?(mural_path)}" %>
+            <%= link_to "Mural de Vagas", jobs_path, class: "text-gray-300 hover:text-white font-bold text-sm uppercase tracking-wide transition #{'text-orange-500' if current_page?(jobs_path)}" %>
 
             <% if user_logged_in? %>
               <% if current_user.client? %>

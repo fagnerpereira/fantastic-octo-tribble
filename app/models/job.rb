@@ -6,18 +6,18 @@ class Job < ApplicationRecord
   enum :status, { open: "open", in_progress: "in_progress", completed: "completed" }
 
   validates :title, presence: { message: "é obrigatório" },
-                    length: { minimum: 3, maximum: 100,
-                             too_short: "deve ter pelo menos %{count} caracteres",
-                             too_long: "deve ter no máximo %{count} caracteres" }
+    length: { minimum: 3, maximum: 100,
+             too_short: "deve ter pelo menos %{count} caracteres",
+             too_long: "deve ter no máximo %{count} caracteres" }
 
   validates :description, presence: { message: "é obrigatória" },
-                         length: { minimum: 10, maximum: 1000,
-                                  too_short: "deve ter pelo menos %{count} caracteres",
-                                  too_long: "deve ter no máximo %{count} caracteres" }
+    length: { minimum: 10, maximum: 1000,
+             too_short: "deve ter pelo menos %{count} caracteres",
+             too_long: "deve ter no máximo %{count} caracteres" }
 
   validates :price, presence: { message: "é obrigatório" },
-                   numericality: { greater_than: 0,
-                                  message: "deve ser maior que zero" }
+    numericality: { greater_than: 0,
+                   message: "deve ser maior que zero" }
 
   validates :status, presence: true
 

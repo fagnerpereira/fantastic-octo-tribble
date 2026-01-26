@@ -12,7 +12,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       password: "password123"
     }
     assert_redirected_to root_path
-    assert_match /Bem-vindo de volta/, flash[:notice]
+    assert_match(/Bem-vindo de volta/, flash[:notice])
     assert_equal users(:worker_one).id, session[:user_id]
   end
 
@@ -61,7 +61,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     # Then logout
     delete logout_path
     assert_redirected_to root_path
-    assert_match /saiu da sua conta/, flash[:notice]
+    assert_match(/saiu da sua conta/, flash[:notice])
     assert_nil session[:user_id]
   end
 

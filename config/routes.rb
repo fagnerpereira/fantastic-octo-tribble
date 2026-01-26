@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
+  root "pages#home"
+
   get "chats/show"
   get "pages/home"
-  root "pages#home"
 
   get "sign_up", to: "users#new"
   post "sign_up", to: "users#create"
@@ -12,11 +13,13 @@ Rails.application.routes.draw do
 
   resources :users, only: [ :show, :edit, :update ]
   resources :jobs, only: [ :index, :new, :create, :show, :edit, :update, :destroy ]
-  resources :chats, only: [ :show ]
+  resources :chats, only: :show do
+    resources :messages
+  end
 
-  get "mural", to: "jobs#index"
+  # get "mural", to: "jobs#index"
   get "dashboard", to: "clients#dashboard"
 
   # Health check
-  get "up" => "rails/health#show", as: :rails_health_check
+  get "up" => "rails/health#show", :as => :rails_health_check
 end
